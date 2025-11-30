@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Find Your Next Handyman | Lucky Aigbefoh</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta
+    name="description"
+    content="A simple way to connect busy people with reliable local handymen for repairs, maintenance, and small jobs."
+  />
+
+  <link rel="icon" href="favicon.png" type="image/png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <div class="logo">Find Your Next Handyman</div>
+      <nav class="main-nav">
+        <a href="#how-it-works">How it works</a>
+        <a href="#benefits">Why this helps</a>
+        <a href="#contact">Register interest</a>
+      </nav>
+    </div>
+
+    <section class="hero container">
+      <div class="hero-text">
+        <p class="eyebrow">Concept project by Lucky Aigbefoh</p>
+        <h1>A simple way to find a reliable handyman when you actually need one.</h1>
+        <p class="hero-subtitle">
+          Instead of endless searching or asking around, this concept aims to give people a short,
+          trusted list of local handymen they can contact quickly for small jobs and repairs.
+        </p>
+        <div class="hero-actions">
+          <a href="#contact" class="btn primary-btn">Register your interest</a>
+          <a href="#how-it-works" class="btn ghost-btn">See how it could work</a>
+        </div>
+      </div>
+    </section>
+  </header>
+
+  <main>
+    <section id="how-it-works" class="section">
+      <div class="container">
+        <h2>How it could work</h2>
+        <p>
+          The idea is to keep things simple for both the person needing help and the handyman providing it.
+        </p>
+
+        <div class="grid">
+          <div class="info-card">
+            <h3>1. Choose your job type</h3>
+            <ul>
+              <li>Small repairs</li>
+              <li>Maintenance jobs</li>
+              <li>Furniture assembly</li>
+            </ul>
+          </div>
+          <div class="info-card">
+            <h3>2. See local handymen</h3>
+            <ul>
+              <li>Short, clear profiles</li>
+              <li>Service area and type of work</li>
+              <li>Basic availability</li>
+            </ul>
+          </div>
+          <div class="info-card">
+            <h3>3. Send a simple enquiry</h3>
+            <ul>
+              <li>Describe the job in a few sentences</li>
+              <li>Share preferred times</li>
+              <li>Receive a call or message back</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="benefits" class="section section-alt">
+      <div class="container">
+        <h2>Why this could help</h2>
+        <div class="grid">
+          <div class="info-card">
+            <h3>For customers</h3>
+            <ul>
+              <li>No need to search through dozens of listings.</li>
+              <li>Clear, simple information about each handyman.</li>
+              <li>One place to start for small, everyday jobs.</li>
+            </ul>
+          </div>
+          <div class="info-card">
+            <h3>For handymen</h3>
+            <ul>
+              <li>More focused, relevant enquiries.</li>
+              <li>Less time spent explaining what you do.</li>
+              <li>Better match between jobs and skills.</li>
+            </ul>
+          </div>
+          <div class="info-card">
+            <h3>For the idea</h3>
+            <ul>
+              <li>Starts simple and can grow over time.</li>
+              <li>Room to add ratings, reviews, or pricing later.</li>
+              <li>Could expand to more areas and services.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="section">
+      <div class="container">
+        <h2>Register your interest</h2>
+        <p>
+          This is a concept project I’m exploring. If you're a handyman or someone who often needs small jobs
+          done and this idea interests you, you can leave your details below.
+        </p>
+
+        <form
+          action="https://formspree.io/f/mwpyeprl"
+          method="POST"
+          class="contact-form"
+        >
+          <div class="form-row">
+            <label for="name">Name</label>
+            <input id="name" name="name" type="text" required />
+          </div>
+
+          <div class="form-row">
+            <label for="role">I am a…</label>
+            <select id="role" name="role">
+              <option value="customer">Customer (needs jobs done)</option>
+              <option value="handyman">Handyman / tradesperson</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+
+          <div class="form-row">
+            <label for="location">Location</label>
+            <input id="location" name="location" type="text" placeholder="e.g. East London" />
+          </div>
+
+          <div class="form-row form-row-full">
+            <label for="message">Message</label>
+            <textarea id="message" name="message" rows="4" required></textarea>
+          </div>
+
+          <button type="submit" class="btn primary-btn">Send</button>
+        </form>
+
+        <p class="note">
+          This is early-stage and for learning purposes. Sharing your interest simply helps me understand
+          whether the idea is useful and who it might help.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>© 2025 Find Your Next Handyman · Concept by Lucky Aigbefoh</p>
+    </div>
+  </footer>
+</body>
+</html>
