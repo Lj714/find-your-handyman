@@ -29,12 +29,12 @@
 
     <section class="hero container">
       <div class="hero-text">
-        <p class="eyebrow">Get Started</p>
+        <p class="eyebrow">Get started</p>
         <h1>Post a job or join as a handyman</h1>
 
         <p class="hero-subtitle">
-          Complete the form below to request handyman help or register as a handyman who offers services.
-          We’ll review your details and follow up with the next steps.
+          Use this page to request handyman help or register as a handyman offering services.
+          Fill in the form and we’ll review your details and follow up with the next steps.
         </p>
       </div>
     </section>
@@ -42,58 +42,89 @@
 
   <main>
     <section class="section">
-      <div class="container">
-        <form
-          action="https://formspree.io/f/mwpyeprl"
-          method="POST"
-          class="contact-form"
-        >
-          <div class="form-row">
-            <label for="name">Full name</label>
-            <input id="name" name="name" type="text" required />
+      <div class="container get-started-layout">
+        <div class="role-panels">
+          <div class="role-panel">
+            <h2>I'm a customer</h2>
+            <p>Use this if you need help with:</p>
+            <ul>
+              <li>Small repairs and fixes</li>
+              <li>Home or flat maintenance</li>
+              <li>Furniture assembly and similar jobs</li>
+            </ul>
+            <p class="role-note">
+              Share what you need, where you are, and any preferred times. 
+              We’ll use this to find suitable handymen where possible.
+            </p>
           </div>
 
-          <div class="form-row">
-            <label for="email">Email</label>
-            <input id="email" name="_replyto" type="email" required />
+          <div class="role-panel">
+            <h2>I'm a handyman</h2>
+            <p>Use this if you want to:</p>
+            <ul>
+              <li>Receive more job enquiries</li>
+              <li>Work with local customers</li>
+              <li>Show the services you offer</li>
+            </ul>
+            <p class="role-note">
+              Tell us what kind of work you do, where you work, and how you like to be contacted.
+            </p>
           </div>
+        </div>
 
-          <div class="form-row">
-            <label for="role">I am a…</label>
-            <select id="role" name="role">
-              <option value="customer">Customer (I need a handyman)</option>
-              <option value="handyman">Handyman (I offer services)</option>
-            </select>
-          </div>
+        <div class="get-started-form-wrapper">
+          <form
+            action="https://formspree.io/f/mwpyeprl"
+            method="POST"
+            class="contact-form"
+          >
+            <div class="form-row">
+              <label for="name">Full name</label>
+              <input id="name" name="name" type="text" required />
+            </div>
 
-          <div class="form-row">
-            <label for="location">Location</label>
-            <input
-              id="location"
-              name="location"
-              type="text"
-              placeholder="e.g. East London"
-              required
-            />
-          </div>
+            <div class="form-row">
+              <label for="email">Email</label>
+              <input id="email" name="_replyto" type="email" required />
+            </div>
 
-          <div class="form-row form-row-full">
-            <label for="message">Details</label>
-            <textarea
-              id="message"
-              name="message"
-              rows="4"
-              placeholder="If you're a customer: describe the job. If you're a handyman: describe your services."
-              required
-            ></textarea>
-          </div>
+            <div class="form-row">
+              <label for="role">I am a…</label>
+              <select id="role" name="role">
+                <option value="customer">Customer (I need a handyman)</option>
+                <option value="handyman">Handyman (I offer services)</option>
+              </select>
+            </div>
 
-          <button type="submit" class="btn primary-btn">Submit</button>
-        </form>
+            <div class="form-row">
+              <label for="location">Location</label>
+              <input
+                id="location"
+                name="location"
+                type="text"
+                placeholder="e.g. East London"
+                required
+              />
+            </div>
 
-        <p class="note" style="margin-top: 1.2rem">
-          We aim to review submissions as quickly as possible and connect the right people.
-        </p>
+            <div class="form-row form-row-full">
+              <label for="message">Details</label>
+              <textarea
+                id="message"
+                name="message"
+                rows="4"
+                placeholder="If you're a customer: describe the job. If you're a handyman: describe your services."
+                required
+              ></textarea>
+            </div>
+
+            <button type="submit" class="btn primary-btn">Submit</button>
+          </form>
+
+          <p class="note" style="margin-top: 1.2rem">
+            We aim to review submissions as quickly as possible and connect the right people.
+          </p>
+        </div>
       </div>
     </section>
   </main>

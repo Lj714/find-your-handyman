@@ -390,3 +390,75 @@ body {
     align-items: flex-start;
   }
 }
+/* Get started layout */
+
+.get-started-layout {
+  display: grid;
+  gap: 2rem;
+  align-items: flex-start;
+  margin-top: 1.5rem;
+}
+
+.role-panels {
+  display: grid;
+  gap: 1rem;
+}
+
+.role-panel {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 1.1rem 1.1rem 1.2rem;
+  border: 1px solid rgba(148, 163, 184, 0.6);
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.12);
+}
+
+.role-panel h2 {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  color: #0f172a;
+}
+
+.role-panel p {
+  font-size: 0.9rem;
+  color: #4b5563;
+  margin-bottom: 0.35rem;
+}
+
+.role-panel ul {
+  list-style: disc;
+  margin: 0.2rem 0 0.5rem 1.2rem;
+  padding: 0;
+  font-size: 0.9rem;
+  color: #4b5563;
+}
+
+.role-panel li {
+  margin-bottom: 0.25rem;
+}
+
+.role-note {
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+.get-started-form-wrapper {
+  width: 100%;
+}
+
+/* Responsive layout for get-started page */
+
+@media (min-width: 900px) {
+  .get-started-layout {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1.4fr);
+  }
+
+  .role-panels {
+    grid-auto-rows: min-content;
+  }
+}
+
+@media (max-width: 720px) {
+  .get-started-layout {
+    grid-template-columns: 1fr;
+  }
+}
