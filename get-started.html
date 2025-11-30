@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Post a Job or Join as a Handyman | Find Your Next Handyman</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta
+    name="description"
+    content="Submit a job request or join as a handyman. Connect with local customers and handymen."
+  />
+
+  <link rel="icon" href="favicon.png" type="image/png" />
+  <link rel="stylesheet" href="styles.css" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"
+    rel="stylesheet"
+  />
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <div class="logo">Find Your Next Handyman</div>
+      <nav class="main-nav">
+        <a href="index.html">Home</a>
+      </nav>
+    </div>
+
+    <section class="hero container">
+      <div class="hero-text">
+        <p class="eyebrow">Get Started</p>
+        <h1>Post a job or join as a handyman</h1>
+
+        <p class="hero-subtitle">
+          Complete the form below to request handyman help or register as a handyman who offers services.
+          We’ll review your details and follow up with the next steps.
+        </p>
+      </div>
+    </section>
+  </header>
+
+  <main>
+    <section class="section">
+      <div class="container">
+        <form
+          action="https://formspree.io/f/mwpyeprl"
+          method="POST"
+          class="contact-form"
+        >
+          <div class="form-row">
+            <label for="name">Full name</label>
+            <input id="name" name="name" type="text" required />
+          </div>
+
+          <div class="form-row">
+            <label for="email">Email</label>
+            <input id="email" name="_replyto" type="email" required />
+          </div>
+
+          <div class="form-row">
+            <label for="role">I am a…</label>
+            <select id="role" name="role">
+              <option value="customer">Customer (I need a handyman)</option>
+              <option value="handyman">Handyman (I offer services)</option>
+            </select>
+          </div>
+
+          <div class="form-row">
+            <label for="location">Location</label>
+            <input
+              id="location"
+              name="location"
+              type="text"
+              placeholder="e.g. East London"
+              required
+            />
+          </div>
+
+          <div class="form-row form-row-full">
+            <label for="message">Details</label>
+            <textarea
+              id="message"
+              name="message"
+              rows="4"
+              placeholder="If you're a customer: describe the job. If you're a handyman: describe your services."
+              required
+            ></textarea>
+          </div>
+
+          <button type="submit" class="btn primary-btn">Submit</button>
+        </form>
+
+        <p class="note" style="margin-top: 1.2rem">
+          We aim to review submissions as quickly as possible and connect the right people.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>© 2025 Find Your Next Handyman · A platform by Lucky Aigbefoh</p>
+    </div>
+  </footer>
+</body>
+</html>
