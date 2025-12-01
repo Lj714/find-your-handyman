@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta
     name="description"
-    content="A simple platform for customers needing help with repairs and for handymen offering their services. Post a job or join the network."
+    content="A simple platform for customers needing help with repairs and for handymen offering their services. Post a job, create a profile, or browse options."
   />
 
   <link rel="icon" href="favicon.png" type="image/png" />
@@ -27,9 +27,10 @@
     <div class="container nav-bar">
       <div class="logo">Find Your Next Handyman</div>
       <nav class="main-nav">
+        <a href="#actions">What do you need?</a>
         <a href="#how-it-works">How it works</a>
         <a href="#benefits">Benefits</a>
-        <a href="get-started.html" target="_blank">Post a job or join</a>
+        <a href="profiles.html">Browse handymen</a>
       </nav>
     </div>
 
@@ -41,11 +42,11 @@
 
         <p class="hero-subtitle">
           Post a small job, repair, or maintenance task and be matched with local handymen.
-          If you’re a handyman, share your details and start receiving relevant enquiries.
+          If you’re a handyman, create a profile and share the services you offer.
         </p>
 
         <div class="hero-actions">
-          <a href="get-started.html" target="_blank" class="btn primary-btn">Post a job or join</a>
+          <a href="#actions" class="btn primary-btn">What would you like to do?</a>
           <a href="#how-it-works" class="btn ghost-btn">See how it works</a>
         </div>
 
@@ -63,6 +64,42 @@
   </header>
 
   <main>
+    <!-- QUICK ACTIONS -->
+    <section id="actions" class="section actions-section">
+      <div class="container">
+        <h2>What would you like to do?</h2>
+        <p class="actions-intro">
+          Choose the option that best matches what you need today.
+        </p>
+
+        <div class="actions-grid">
+          <a href="create-profile.html" class="action-card">
+            <h3>I am a handyman</h3>
+            <p>Create a public profile with a summary of the services you offer so customers can find you.</p>
+            <span class="action-link">Create a profile →</span>
+          </a>
+
+          <a href="get-started.html" target="_blank" class="action-card">
+            <h3>I need a handyman</h3>
+            <p>Post a job with a few details about the work, location, and timing so we can match you.</p>
+            <span class="action-link">Post a job →</span>
+          </a>
+
+          <a href="profiles.html" class="action-card">
+            <h3>Browse handymen</h3>
+            <p>Look through available handyman profiles by service type and reach out directly.</p>
+            <span class="action-link">Browse profiles →</span>
+          </a>
+
+          <a href="jobs.html" class="action-card">
+            <h3>Browse available jobs</h3>
+            <p>See a list of recent job requests that handymen may be able to help with.</p>
+            <span class="action-link">View jobs →</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
     <!-- HOW IT WORKS -->
     <section id="how-it-works" class="section">
       <div class="container">

@@ -635,3 +635,128 @@ body {
     grid-template-columns: 1fr;
   }
 }
+/* Actions section on homepage */
+
+.actions-section h2 {
+  margin-bottom: 0.5rem;
+}
+
+.actions-intro {
+  font-size: 0.95rem;
+  color: var(--muted);
+  margin-bottom: 1rem;
+}
+
+.actions-grid {
+  display: grid;
+  gap: 1.1rem;
+  margin-top: 0.5rem;
+}
+
+.action-card {
+  display: block;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 1.1rem 1.2rem 1.2rem;
+  border: 1px solid rgba(148, 163, 184, 0.7);
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.12);
+  text-decoration: none;
+  color: inherit;
+  transition:
+    transform var(--transition),
+    box-shadow var(--transition),
+    border-color var(--transition),
+    background var(--transition);
+}
+
+.action-card h3 {
+  font-size: 1.05rem;
+  margin-bottom: 0.4rem;
+  color: #0f172a;
+}
+
+.action-card p {
+  font-size: 0.9rem;
+  color: #4b5563;
+  margin-bottom: 0.6rem;
+}
+
+.action-link {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #0369a1;
+}
+
+.action-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 40px rgba(37, 99, 235, 0.2);
+  border-color: #0ea5e9;
+  background: #f9fafb;
+}
+
+/* Jobs grid */
+
+.jobs-grid {
+  display: grid;
+  gap: 1.1rem;
+  margin-top: 1.2rem;
+}
+
+.job-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 1.1rem 1.2rem 1.2rem;
+  border: 1px solid rgba(148, 163, 184, 0.7);
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.12);
+}
+
+.job-card h3 {
+  font-size: 1.05rem;
+  margin-bottom: 0.35rem;
+}
+
+.job-location {
+  font-size: 0.85rem;
+  color: #6b7280;
+  margin-bottom: 0.4rem;
+}
+
+.job-summary {
+  font-size: 0.9rem;
+  color: #4b5563;
+  margin-bottom: 0.5rem;
+}
+
+.job-details {
+  list-style: disc;
+  margin: 0 0 0 1.2rem;
+  padding: 0;
+  font-size: 0.9rem;
+  color: #4b5563;
+}
+
+.job-details li {
+  margin-bottom: 0.2rem;
+}
+
+/* Responsive layout tweaks for actions and jobs */
+
+@media (min-width: 900px) {
+  .actions-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .jobs-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .actions-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .jobs-grid {
+    grid-template-columns: 1fr;
+  }
+}
