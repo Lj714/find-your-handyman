@@ -760,3 +760,16 @@ body {
     grid-template-columns: 1fr;
   }
 }
+.back-link {
+  font-size: 0.85rem;
+  margin-bottom: 0.4rem;
+}
+
+.back-link a {
+  color: #0369a1;
+  text-decoration: none;
+}
+
+.back-link a:hover {
+  text-decoration: underline;
+}
