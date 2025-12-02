@@ -13,6 +13,8 @@
   --transition: 0.2s ease;
 }
 
+/* Reset */
+
 *,
 *::before,
 *::after {
@@ -22,7 +24,8 @@
 }
 
 body {
-  font-family: "Poppins", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: "Poppins", system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
   background: radial-gradient(circle at top, #eff6ff 0, #f3f4f6 40%, #e5e7eb 100%);
   color: var(--text);
   line-height: 1.6;
@@ -122,7 +125,8 @@ body {
 .hero-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.75rem;
+  gap: 0.8rem;
+  margin-top: 0.2rem;
   margin-bottom: 1rem;
 }
 
@@ -146,6 +150,22 @@ body {
 .hero-footnote {
   font-size: 0.85rem;
   color: #6b7280;
+}
+
+/* Back link (sub pages) */
+
+.back-link {
+  font-size: 0.85rem;
+  margin-bottom: 0.75rem;
+}
+
+.back-link a {
+  color: #0369a1;
+  text-decoration: none;
+}
+
+.back-link a:hover {
+  text-decoration: underline;
 }
 
 /* Buttons */
@@ -250,7 +270,7 @@ body {
   margin-bottom: 0.3rem;
 }
 
-/* Contact form */
+/* Contact / shared form styles */
 
 .contact-form {
   margin-top: 1.6rem;
@@ -329,7 +349,7 @@ body {
   background-image: linear-gradient(to bottom, #f9fafb, #f3f4f6);
 }
 
-/* Contact note */
+/* Small helper text */
 
 .note {
   margin-top: 1rem;
@@ -348,48 +368,6 @@ body {
   background: #f9fafb;
 }
 
-/* Responsive */
-
-@media (min-width: 720px) {
-  .grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
-  .contact-form {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .form-row:nth-child(1),
-  .form-row:nth-child(2),
-  .form-row:nth-child(3),
-  .form-row:nth-child(4) {
-    grid-column: span 1;
-  }
-
-  .form-row-full {
-    grid-column: 1 / -1;
-  }
-
-  .contact-form .btn {
-    grid-column: 1 / -1;
-    justify-self: flex-start;
-  }
-}
-
-@media (max-width: 640px) {
-  .main-nav {
-    display: none;
-  }
-
-  .hero {
-    padding-top: 0.5rem;
-  }
-
-  .hero-highlights {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-}
 /* Get started layout */
 
 .get-started-layout {
@@ -445,79 +423,7 @@ body {
   width: 100%;
 }
 
-/* Responsive layout for get-started page */
-
-@media (min-width: 900px) {
-  .get-started-layout {
-    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1.4fr);
-  }
-
-  .role-panels {
-    grid-auto-rows: min-content;
-  }
-}
-
-@media (max-width: 720px) {
-  .get-started-layout {
-    grid-template-columns: 1fr;
-  }
-}
-/* Get started layout (already partly present, safe to keep / extend) */
-
-.get-started-layout {
-  display: grid;
-  gap: 2rem;
-  align-items: flex-start;
-  margin-top: 1.5rem;
-}
-
-.role-panels {
-  display: grid;
-  gap: 1rem;
-}
-
-.role-panel {
-  background: #ffffff;
-  border-radius: 16px;
-  padding: 1.1rem 1.1rem 1.2rem;
-  border: 1px solid rgba(148, 163, 184, 0.6);
-  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.12);
-}
-
-.role-panel h2 {
-  font-size: 1.1rem;
-  margin-bottom: 0.5rem;
-  color: #0f172a;
-}
-
-.role-panel p {
-  font-size: 0.9rem;
-  color: #4b5563;
-  margin-bottom: 0.35rem;
-}
-
-.role-panel ul {
-  list-style: disc;
-  margin: 0.2rem 0 0.5rem 1.2rem;
-  padding: 0;
-  font-size: 0.9rem;
-  color: #4b5563;
-}
-
-.role-panel li {
-  margin-bottom: 0.25rem;
-}
-
-.role-note {
-  font-size: 0.85rem;
-  color: #6b7280;
-}
-
-.get-started-form-wrapper {
-  width: 100%;
-}
-
-/* Service pills for profiles page */
+/* Service pills for profiles page (if used) */
 
 .service-pills {
   display: flex;
@@ -551,7 +457,7 @@ body {
   transform: translateY(-1px);
 }
 
-/* Profiles grid & cards */
+/* Profiles grid & cards (legacy if you ever go back to manual profiles) */
 
 .section-profiles h2 {
   margin-bottom: 1rem;
@@ -614,27 +520,6 @@ body {
   text-decoration: underline;
 }
 
-/* Responsive layout tweaks */
-
-@media (min-width: 900px) {
-  .get-started-layout {
-    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1.4fr);
-  }
-
-  .role-panels {
-    grid-auto-rows: min-content;
-  }
-
-  .profiles-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 720px) {
-  .get-started-layout {
-    grid-template-columns: 1fr;
-  }
-}
 /* Actions section on homepage */
 
 .actions-section h2 {
@@ -739,9 +624,80 @@ body {
   margin-bottom: 0.2rem;
 }
 
-/* Responsive layout tweaks for actions and jobs */
+/* Create Profile page helper list */
+
+.profile-info-list {
+  list-style: disc;
+  margin: 0.5rem 0 0 1.2rem;
+  padding: 0;
+  font-size: 0.95rem;
+  color: #4b5563;
+  line-height: 1.5;
+}
+
+.profile-info-list li {
+  margin-bottom: 0.45rem;
+}
+
+/* Airtable embed styling */
+
+.airtable-wrapper {
+  width: 100%;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(148, 163, 184, 0.6);
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.18);
+  background: #ffffff;
+  margin-top: 1rem;
+}
+
+.airtable-iframe {
+  width: 100%;
+  min-height: 720px;
+  border: 0;
+}
+
+/* Responsive */
+
+@media (min-width: 720px) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .contact-form {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .form-row:nth-child(1),
+  .form-row:nth-child(2),
+  .form-row:nth-child(3),
+  .form-row:nth-child(4) {
+    grid-column: span 1;
+  }
+
+  .form-row-full {
+    grid-column: 1 / -1;
+  }
+
+  .contact-form .btn {
+    grid-column: 1 / -1;
+    justify-self: flex-start;
+  }
+}
 
 @media (min-width: 900px) {
+  .get-started-layout {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1.4fr);
+  }
+
+  .role-panels {
+    grid-auto-rows: min-content;
+  }
+
+  .profiles-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .actions-grid {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
@@ -752,24 +708,31 @@ body {
 }
 
 @media (max-width: 720px) {
-  .actions-grid {
+  .get-started-layout {
     grid-template-columns: 1fr;
   }
 
+  .airtable-iframe {
+    min-height: 640px;
+  }
+
+  .actions-grid,
   .jobs-grid {
     grid-template-columns: 1fr;
   }
 }
-.back-link {
-  font-size: 0.85rem;
-  margin-bottom: 0.4rem;
-}
 
-.back-link a {
-  color: #0369a1;
-  text-decoration: none;
-}
+@media (max-width: 640px) {
+  .main-nav {
+    display: none;
+  }
 
-.back-link a:hover {
-  text-decoration: underline;
+  .hero {
+    padding-top: 0.5rem;
+  }
+
+  .hero-highlights {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }

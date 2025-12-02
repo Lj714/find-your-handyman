@@ -25,25 +25,38 @@
       <nav class="main-nav">
         <a href="index.html">Home</a>
         <a href="profiles.html">Browse handymen</a>
+        <a href="jobs.html">Browse jobs</a>
       </nav>
     </div>
 
     <section class="hero container">
-	 <div class="hero-text">
-		<p class="back-link">
-		<a href="index.html"
-         onclick="if (history.length > 1) { history.back(); return false; }">
-        ← Back
-      </a>
-    </p>
+      <div class="hero-text">
+        <p class="back-link">
+          <a href="index.html"
+             onclick="if (history.length > 1) { history.back(); return false; }">
+            ← Back
+          </a>
+        </p>
 
-    <p class="eyebrow">For handymen</p>
-    <h1>Create a public profile</h1>
+        <p class="eyebrow">For handymen</p>
+        <h1>Create a public profile</h1>
 
         <p class="hero-subtitle">
-          Share a short summary of the services you offer so that customers can find you more easily.
-          Once submitted, your details can be reviewed and added to the public profiles page.
+          Share your details once and appear in the public directory, so customers can find and contact you more easily.
+          Your profile is stored securely and can be updated anytime.
         </p>
+
+        <div class="hero-actions">
+          <a
+            href="https://airtable.com/appAGqN7IZIFcgA2b/shrBGvRKpss5JlH8W"
+            target="_blank"
+            class="btn primary-btn"
+          >
+            Create your profile
+          </a>
+
+          <a href="profiles.html" class="btn ghost-btn">View existing profiles</a>
+        </div>
       </div>
     </section>
   </header>
@@ -51,88 +64,13 @@
   <main>
     <section class="section">
       <div class="container">
-        <form
-          action="https://formspree.io/f/mwpyeprl"
-          method="POST"
-          class="contact-form"
-        >
-          <div class="form-row">
-            <label for="name">Full name</label>
-            <input id="name" name="name" type="text" required />
-          </div>
-
-          <div class="form-row">
-            <label for="email">Email</label>
-            <input id="email" name="_replyto" type="email" required />
-          </div>
-
-          <div class="form-row">
-            <label for="phone">Phone (optional)</label>
-            <input id="phone" name="phone" type="tel" placeholder="+44…" />
-          </div>
-
-          <div class="form-row">
-            <label for="main-service">Main service</label>
-            <select id="main-service" name="main_service" required>
-              <option value="">Select a main service</option>
-              <option value="electrician">Electrician</option>
-              <option value="plumber">Plumber</option>
-              <option value="general-repairs">General repairs</option>
-              <option value="assembly">Furniture assembly</option>
-              <option value="other">Other</option>
-            </select>
-          </div>
-
-          <div class="form-row form-row-full">
-            <label for="other-services">Other services you offer</label>
-            <textarea
-              id="other-services"
-              name="other_services"
-              rows="3"
-              placeholder="E.g. TV mounting, small carpentry jobs, decorating touch-ups…"
-            ></textarea>
-          </div>
-
-          <div class="form-row form-row-full">
-            <label for="experience">Experience summary</label>
-            <textarea
-              id="experience"
-              name="experience"
-              rows="3"
-              placeholder="Briefly describe your experience, certifications (if any), and how long you’ve been working."
-              required
-            ></textarea>
-          </div>
-
-          <div class="form-row form-row-full">
-            <label for="areas">Areas you cover</label>
-            <input
-              id="areas"
-              name="areas"
-              type="text"
-              placeholder="E.g. East London, Central London, within 10 miles of SE10"
-              required
-            />
-          </div>
-
-          <div class="form-row form-row-full">
-            <label for="contact-pref">Preferred contact details for customers</label>
-            <textarea
-              id="contact-pref"
-              name="contact_preference"
-              rows="2"
-              placeholder="E.g. Mobile and WhatsApp only, or email only."
-              required
-            ></textarea>
-          </div>
-
-          <button type="submit" class="btn primary-btn">Submit profile</button>
-        </form>
-
-        <p class="note" style="margin-top: 1.2rem">
-          After you submit this form, your details can be reviewed and added to the
-          <a href="profiles.html">public profiles page</a> so customers can reach out directly.
-        </p>
+        <h2>How your profile works</h2>
+        <ul class="profile-info-list">
+          <li>You fill in the Airtable form with your services, experience, and areas you cover.</li>
+          <li>Your details are reviewed and approved before appearing publicly.</li>
+          <li>Customers browsing the directory can contact you directly using your details.</li>
+          <li>You can resubmit changes anytime using the same form.</li>
+        </ul>
       </div>
     </section>
   </main>
