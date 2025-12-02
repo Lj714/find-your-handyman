@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta
     name="description"
-    content="Browse example handyman job requests. Handymen can see the type of work customers are looking for."
+    content="Handymen can browse available jobs posted by customers. Jobs are updated automatically from Airtable."
   />
 
   <link rel="icon" href="favicon.png" type="image/png" />
@@ -24,26 +24,26 @@
       <div class="logo">Find Your Next Handyman</div>
       <nav class="main-nav">
         <a href="index.html">Home</a>
-        <a href="get-started.html" target="_blank">Post a job or join</a>
+        <a href="get-started.html">Post a job</a>
         <a href="profiles.html">Browse handymen</a>
+        <a href="create-profile.html">I am a handyman</a>
       </nav>
     </div>
 
     <section class="hero container">
-	 <div class="hero-text">
-		<p class="back-link">
-      <a href="index.html"
-         onclick="if (history.length > 1) { history.back(); return false; }">
-        ← Back
-      </a>
-    </p>
+      <div class="hero-text">
+        <p class="back-link">
+          <a href="index.html"
+             onclick="if (history.length > 1) { history.back(); return false; }">
+            ← Back
+          </a>
+        </p>
 
-    <p class="eyebrow">For handymen</p>
-    <h1>Browse available jobs</h1>
-
+        <p class="eyebrow">For handymen</p>
+        <h1>Browse available jobs</h1>
         <p class="hero-subtitle">
-          This page can show recent job requests. For now, here are example jobs to give a sense of the
-          type of work customers may need.
+          These jobs are posted by customers and approved before appearing publicly.
+          Use the filters in the list below to find work that matches your skills and area.
         </p>
       </div>
     </section>
@@ -52,49 +52,18 @@
   <main>
     <section class="section">
       <div class="container">
-        <h2>Recent job examples</h2>
-        <div class="jobs-grid">
-          <article class="job-card">
-            <h3>Replace light fittings in living room</h3>
-            <p class="job-location">Location: East London</p>
-            <p class="job-summary">
-              Need an electrician to safely replace two existing light fittings with new ones.
-            </p>
-            <ul class="job-details">
-              <li>Property type: Flat</li>
-              <li>Preferred time: Weekend mornings</li>
-            </ul>
-          </article>
-
-          <article class="job-card">
-            <h3>Fix a leaking kitchen tap</h3>
-            <p class="job-location">Location: South London</p>
-            <p class="job-summary">
-              Slow drip from the main kitchen tap. Looking for a plumber to check and fix.
-            </p>
-            <ul class="job-details">
-              <li>Property type: House</li>
-              <li>Preferred time: Weekdays after 5pm</li>
-            </ul>
-          </article>
-
-          <article class="job-card">
-            <h3>Assemble flat-pack wardrobe</h3>
-            <p class="job-location">Location: Central London</p>
-            <p class="job-summary">
-              One large wardrobe from a flat-pack store to be assembled in a bedroom.
-            </p>
-            <ul class="job-details">
-              <li>Property type: Flat</li>
-              <li>Preferred time: Flexible within next 2 weeks</li>
-            </ul>
-          </article>
-        </div>
-
-        <p class="note" style="margin-top: 1.2rem">
-          In the future, you can copy real job descriptions (from form submissions) into this page so
-          handymen can see what’s currently needed.
+        <h2>Customer jobs</h2>
+        <p class="note" style="margin-bottom: 1rem;">
+          Use the controls in the list below to search, filter, and sort available handyman jobs.
         </p>
+
+        <div class="airtable-wrapper">
+          <iframe
+            class="airtable-iframe"
+            src="https://airtable.com/embed/appAGqN7IZIFcgA2b/shrMVpCaLG24G8hJE?viewControls=on"
+            frameborder="0"
+          ></iframe>
+        </div>
       </div>
     </section>
   </main>

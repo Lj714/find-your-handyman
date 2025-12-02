@@ -2,12 +2,12 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Post a Job or Join as a Handyman | Find Your Next Handyman</title>
+  <title>Post a Job | Find Your Next Handyman</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta
     name="description"
-    content="Submit a job request or join as a handyman. Connect with local customers and handymen."
+    content="Customers can post handyman jobs. Share the details once and local handymen can see and respond."
   />
 
   <link rel="icon" href="favicon.png" type="image/png" />
@@ -25,25 +25,41 @@
       <nav class="main-nav">
         <a href="index.html">Home</a>
         <a href="profiles.html">Browse handymen</a>
+        <a href="create-profile.html">I am a handyman</a>
+        <a href="jobs.html">Browse jobs</a>
       </nav>
     </div>
 
-	<section class="hero container">
-	  <div class="hero-text">
-		<p class="back-link">
-		<a href="index.html"
-         onclick="if (history.length > 1) { history.back(); return false; }">
-        ← Back
-      </a>
-    </p>
+    <section class="hero container">
+      <div class="hero-text">
+        <p class="back-link">
+          <a href="index.html"
+             onclick="if (history.length > 1) { history.back(); return false; }">
+            ← Back
+          </a>
+        </p>
 
-    <p class="eyebrow">Get started</p>
-    <h1>Post a job or join as a handyman</h1>
+        <p class="eyebrow">For customers</p>
+        <h1>I need a handyman – post a job</h1>
 
         <p class="hero-subtitle">
-          Use this page to request handyman help or register as a handyman offering services.
-          Fill in the form and we’ll review your details and follow up with the next steps.
+          This page is just for customers who need help with repairs, maintenance or small projects.
+          Share a few details about your job and we’ll make it visible to local handymen.
         </p>
+
+        <div class="hero-actions">
+          <a
+            href="https://airtable.com/appAGqN7IZIFcgA2b/shrunIc9VwaYVZQ5s"
+            target="_blank"
+            class="btn primary-btn"
+          >
+            Open job request form
+          </a>
+
+          <a href="jobs.html" class="btn ghost-btn">
+            View available jobs
+          </a>
+        </div>
       </div>
     </section>
   </header>
@@ -51,91 +67,37 @@
   <main>
     <section class="section">
       <div class="container get-started-layout">
-        <!-- Left side: explanation panels -->
-        <div class="role-panels">
-          <div class="role-panel">
-            <h2>I'm a customer</h2>
-            <p>Use this if you need help with:</p>
-            <ul>
-              <li>Small repairs and fixes</li>
-              <li>Home or flat maintenance</li>
-              <li>Furniture assembly and similar jobs</li>
-            </ul>
-            <p class="role-note">
-              Share what you need, where you are, and any preferred times.
-              We’ll use this to find suitable handymen where possible.
-            </p>
-          </div>
-
-          <div class="role-panel">
-            <h2>I'm a handyman</h2>
-            <p>Use this if you want to:</p>
-            <ul>
-              <li>Receive more job enquiries</li>
-              <li>Work with local customers</li>
-              <li>Show the services you offer</li>
-            </ul>
-            <p class="role-note">
-              Tell us what kind of work you do, where you work, and how you like to be contacted.
-              If you’d like a public profile that customers can browse, you can also
-              <a href="create-profile.html">create a profile here</a>.
-            </p>
-          </div>
-        </div>
-
-        <!-- Right side: shared form -->
-        <div class="get-started-form-wrapper">
-          <form
-            action="https://formspree.io/f/mwpyeprl"
-            method="POST"
-            class="contact-form"
-          >
-            <div class="form-row">
-              <label for="name">Full name</label>
-              <input id="name" name="name" type="text" required />
-            </div>
-
-            <div class="form-row">
-              <label for="email">Email</label>
-              <input id="email" name="_replyto" type="email" required />
-            </div>
-
-            <div class="form-row">
-              <label for="role">I am a…</label>
-              <select id="role" name="role">
-                <option value="customer">Customer (I need a handyman)</option>
-                <option value="handyman">Handyman (I offer services)</option>
-              </select>
-            </div>
-
-            <div class="form-row">
-              <label for="location">Location</label>
-              <input
-                id="location"
-                name="location"
-                type="text"
-                placeholder="e.g. East London"
-                required
-              />
-            </div>
-
-            <div class="form-row form-row-full">
-              <label for="message">Details</label>
-              <textarea
-                id="message"
-                name="message"
-                rows="4"
-                placeholder="If you're a customer: describe the job. If you're a handyman: describe your services."
-                required
-              ></textarea>
-            </div>
-
-            <button type="submit" class="btn primary-btn">Submit</button>
-          </form>
-
-          <p class="note" style="margin-top: 1.2rem">
-            We aim to review submissions as quickly as possible and connect the right people.
+        <div>
+          <h2>What you’ll be asked</h2>
+          <p>
+            The form will ask for a clear description of the work, where you’re based,
+            and how and when you’d like to be contacted.
           </p>
+
+          <div class="role-panels" style="margin-top: 1.5rem;">
+            <article class="role-panel">
+              <h2>Details that help handymen</h2>
+              <ul>
+                <li>A short job title (e.g. “Replace leaking kitchen tap”).</li>
+                <li>Your area or postcode (no full address needed yet).</li>
+                <li>Any photos or extra notes you think are useful.</li>
+                <li>When you’d ideally like the work done.</li>
+              </ul>
+              <p class="role-note">
+                The more specific you are, the easier it is for the right handyman to say yes.
+              </p>
+            </article>
+
+            <article class="role-panel">
+              <h2>What happens after you submit</h2>
+              <ul>
+                <li>Your job is stored securely in our system.</li>
+                <li>We review and approve suitable jobs.</li>
+                <li>Approved jobs appear on the public jobs list for handymen.</li>
+                <li>Handymen contact you directly using the details you provide.</li>
+              </ul>
+            </article>
+          </div>
         </div>
       </div>
     </section>
