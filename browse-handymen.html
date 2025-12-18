@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Browse Local Handymen | Find Your Next Handyman</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta
+    name="description"
+    content="Browse local handymen by service. Profiles are updated automatically from the platform."
+  />
+
+  <link rel="icon" href="favicon.png" type="image/png" />
+  <link rel="stylesheet" href="styles.css" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"
+    rel="stylesheet"
+  />
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <div class="logo">Find Your Next Handyman</div>
+	  <button class="mobile-nav-toggle" aria-expanded="false" aria-label="Toggle navigation">
+		Menu
+	  </button>
+      <nav class="main-nav">
+        <a href="index.html">Home</a>
+        <a href="get-started.html" >Post a job</a>
+        <a href="create-profile.html">Create a profile</a>
+        <a href="browse-jobs.html">Browse jobs</a>
+      </nav>
+    </div>
+
+    <section class="hero container">
+      <div class="hero-text">
+        <p class="back-link">
+          <a href="index.html"
+             onclick="if (history.length > 1) { history.back(); return false; }">
+            ← Back
+          </a>
+        </p>
+
+        <p class="eyebrow">Browse handymen</p>
+        <h1>Find a handyman by service</h1>
+        <p class="hero-subtitle">
+          Profiles on this page are loaded automatically from the platform.
+          As new handymen create profiles and are approved, they’ll appear here.
+        </p>
+      </div>
+    </section>
+  </header>
+
+  <main>
+    <section class="section">
+      <div class="container">
+        <h2>Handyman profiles</h2>
+        <p class="note" style="margin-bottom: 1rem;">
+          Use the controls in the list below to search, filter by service, or sort profiles.
+        </p>
+
+        <div class="airtable-wrapper">
+          <iframe
+            class="airtable-iframe"
+            src="https://airtable.com/embed/appAGqN7IZIFcgA2b/shrPKefjLLaS6XmqH?viewControls=on"
+            frameborder="0"
+          ></iframe>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>© 2025 Find Your Next Handyman · A platform by Lucky Aigbefoh</p>
+    </div>
+  </footer>
+  
+  <script src="script.js"></script>
+
+</body>
+</html>

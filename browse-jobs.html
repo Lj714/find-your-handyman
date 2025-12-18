@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Browse Available Jobs | Find Your Next Handyman</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta
+    name="description"
+    content="Handymen can browse available jobs posted by customers. Jobs are updated automatically from Airtable."
+  />
+
+  <link rel="icon" href="favicon.png" type="image/png" />
+  <link rel="stylesheet" href="styles.css" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"
+    rel="stylesheet"
+  />
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <div class="logo">Find Your Next Handyman</div>
+	  <button class="mobile-nav-toggle" aria-expanded="false" aria-label="Toggle navigation">
+		Menu
+      </button>
+      <nav class="main-nav">
+        <a href="index.html">Home</a>
+        <a href="get-started.html">Post a job</a>
+        <a href="browse-handymen.html">Browse handymen</a>
+        <a href="create-profile.html">I am a handyman</a>
+      </nav>
+    </div>
+
+    <section class="hero container">
+      <div class="hero-text">
+        <p class="back-link">
+          <a href="index.html"
+             onclick="if (history.length > 1) { history.back(); return false; }">
+            ← Back
+          </a>
+        </p>
+
+        <p class="eyebrow">For handymen</p>
+        <h1>Browse available jobs</h1>
+        <p class="hero-subtitle">
+          These jobs are posted by customers and approved before appearing publicly.
+          Use the filters in the list below to find work that matches your skills and area.
+        </p>
+      </div>
+    </section>
+  </header>
+
+  <main>
+    <section class="section">
+      <div class="container">
+        <h2>Customer jobs</h2>
+        <p class="note" style="margin-bottom: 1rem;">
+          Use the controls in the list below to search, filter, and sort available handyman jobs.
+        </p>
+
+        <div class="airtable-wrapper">
+          <iframe
+            class="airtable-iframe"
+            src="https://airtable.com/embed/appAGqN7IZIFcgA2b/shrMVpCaLG24G8hJE?viewControls=on"
+            frameborder="0"
+          ></iframe>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>© 2025 Find Your Next Handyman · A platform by Lucky Aigbefoh</p>
+    </div>
+  </footer>
+  
+  <script src="script.js"></script>
+
+</body>
+</html>
