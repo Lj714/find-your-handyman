@@ -5,9 +5,7 @@
   <title>Post a Job | Find Your Next Handyman</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="styles.css" />
-
   <style>
-    /* Light inline styling in case styles.css doesn’t cover everything */
     body {
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       background: #f5f7fb;
@@ -95,126 +93,121 @@
 </head>
 
 <body>
-<div class="page-wrap">
-  <!-- Your existing header/nav can go here -->
+  <div class="page-wrap">
+    <main>
+      <div class="form-shell">
+        <h1>Tell us about the job</h1>
+        <p>Please share a few details and we’ll notify matching handymen.</p>
 
-  <main>
-    <div class="form-shell">
-      <h1>Tell us about the job</h1>
-      <p>Please share a few details and we’ll notify matching handymen.</p>
+        <form id="job-form">
+          <div class="field-row">
+            <label for="jobTitle">Job title <span class="required">*</span></label>
+            <input id="jobTitle" name="jobTitle" type="text" required placeholder="e.g. Painting 5 rooms" />
+          </div>
 
-      <form id="job-form">
-        <div class="field-row">
-          <label for="jobTitle">Job title <span class="required">*</span></label>
-          <input id="jobTitle" name="jobTitle" type="text" required placeholder="e.g. Painting 5 rooms" />
-        </div>
+          <div class="field-row">
+            <label for="customerName">Your name <span class="required">*</span></label>
+            <input id="customerName" name="customerName" type="text" required />
+          </div>
 
-        <div class="field-row">
-          <label for="customerName">Your name <span class="required">*</span></label>
-          <input id="customerName" name="customerName" type="text" required />
-        </div>
+          <div class="field-row">
+            <label for="email">Email <span class="required">*</span></label>
+            <input id="email" name="email" type="email" required />
+          </div>
 
-        <div class="field-row">
-          <label for="email">Email <span class="required">*</span></label>
-          <input id="email" name="email" type="email" required />
-        </div>
+          <div class="field-row">
+            <label for="phone">Phone <span class="required">*</span></label>
+            <input id="phone" name="phone" type="tel" required />
+            <div class="hint">Handymen will use this to contact you about the job.</div>
+          </div>
 
-        <div class="field-row">
-          <label for="phone">Phone <span class="required">*</span></label>
-          <input id="phone" name="phone" type="tel" required />
-          <div class="hint">Handymen will use this to contact you about the job.</div>
-        </div>
+          <div class="field-row">
+            <label for="location">Location <span class="required">*</span></label>
+            <input id="location" name="location" type="text" required placeholder="e.g. Maidstone, Kent" />
+          </div>
 
-        <div class="field-row">
-          <label for="location">Location <span class="required">*</span></label>
-          <input id="location" name="location" type="text" required placeholder="e.g. Maidstone, Kent" />
-        </div>
+          <div class="field-row">
+            <label for="jobDetails">Job details <span class="required">*</span></label>
+            <textarea id="jobDetails" name="jobDetails" required placeholder="Please describe the work, property type, access, etc."></textarea>
+          </div>
 
-        <div class="field-row">
-          <label for="jobDetails">Job details <span class="required">*</span></label>
-          <textarea id="jobDetails" name="jobDetails" required placeholder="Please describe the work, property type, access, etc."></textarea>
-        </div>
+          <div class="field-row">
+            <label for="preferredTiming">Preferred timing</label>
+            <input id="preferredTiming" name="preferredTiming" type="text" placeholder="e.g. Weekends, evenings, ASAP" />
+          </div>
 
-        <div class="field-row">
-          <label for="preferredTiming">Preferred timing</label>
-          <input id="preferredTiming" name="preferredTiming" type="text" placeholder="e.g. Weekends, evenings, ASAP" />
-        </div>
+          <div class="field-row">
+            <label for="mainService">Main service needed <span class="required">*</span></label>
+            <select id="mainService" name="mainService" required>
+              <option value="">Select a service…</option>
+              <option value="Electrician">Electrician</option>
+              <option value="Plumber">Plumber</option>
+              <option value="Carpenter">Carpenter</option>
+              <option value="Painting">Painting</option>
+              <option value="Multi-trade">Multi-trade</option>
+              <option value="Handyman">Handyman</option>
+              <option value="General repairs">General repairs</option>
+              <option value="Furniture assembly">Furniture assembly</option>
+            </select>
+          </div>
 
-        <div class="field-row">
-          <label for="mainService">Main service needed <span class="required">*</span></label>
-          <select id="mainService" name="mainService" required>
-            <option value="">Select a service…</option>
-            <option>Electrician</option>
-            <option>Plumber</option>
-            <option>Carpenter</option>
-            <option>Painter</option>
-            <option>Multi-trade</option>
-            <option>Handyman</option>
-            <option>General repairs</option>
-            <option>Furniture assembly</option>
-            <!-- add / adjust to match your Jobs “Main Service Needed” options exactly -->
-          </select>
-        </div>
+          <button type="submit" class="btn-primary" id="submitBtn">Post job</button>
 
-        <button type="submit" class="btn-primary" id="submitBtn">
-          Post job
-        </button>
+          <div id="status" class="status" aria-live="polite"></div>
+        </form>
+      </div>
+    </main>
+  </div>
 
-        <div id="status" class="status" aria-live="polite"></div>
-      </form>
-    </div>
-  </main>
+  <script>
+    const WORKER_URL = "https://handyman-webhook-proxu.l-aigbefoh.workers.dev/";
+    const form = document.getElementById("job-form");
+    const statusEl = document.getElementById("status");
+    const submitBtn = document.getElementById("submitBtn");
 
-  <!-- Your footer here -->
-</div>
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      statusEl.textContent = "";
+      statusEl.className = "status";
+      submitBtn.disabled = true;
 
-<script>
-  // 🔗 REPLACE THIS with your actual Airtable webhook URL
-  const AIRTABLE_WEBHOOK_URL = "https://hooks.airtable.com/workflows/v1/genericWebhook/appAGqN7IZIFcgA2b/wflfuvfH28mD1uZJX/wtr5pI25lIKXbfQpX";
+      const payload = {
+        jobTitle: form.jobTitle.value.trim(),
+        customerName: form.customerName.value.trim(),
+        email: form.email.value.trim(),
+        phone: form.phone.value.trim(),
+        location: form.location.value.trim(),
+        jobDetails: form.jobDetails.value.trim(),
+        preferredTiming: form.preferredTiming.value.trim(),
+        mainServiceNeeded: form.mainService.value
+      };
 
-  const form = document.getElementById("job-form");
-  const statusEl = document.getElementById("status");
-  const submitBtn = document.getElementById("submitBtn");
+      try {
+        const res = await fetch(WORKER_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
 
-  form.addEventListener("submit", async (event) => {
-    event.preventDefault();
-    statusEl.textContent = "";
-    statusEl.className = "status";
-    submitBtn.disabled = true;
+        let data = null;
+        try {
+          data = await res.json();
+        } catch (_) {}
 
-    const payload = {
-      jobTitle: form.jobTitle.value.trim(),
-      customerName: form.customerName.value.trim(),
-      email: form.email.value.trim(),
-      phone: form.phone.value.trim(),
-      location: form.location.value.trim(),
-      jobDetails: form.jobDetails.value.trim(),
-      preferredTiming: form.preferredTiming.value.trim(),
-      mainService: form.mainService.value
-    };
+        if (!res.ok || (data && data.ok === false)) {
+          throw new Error("Request failed");
+        }
 
-    try {
-      const res = await fetch(AIRTABLE_WEBHOOK_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      });
-
-      if (!res.ok) {
-        throw new Error("Request failed with status " + res.status);
+        statusEl.textContent = "Thank you! Your job has been posted and we’ll notify matching handymen shortly.";
+        statusEl.classList.add("status--success");
+        form.reset();
+      } catch (err) {
+        statusEl.textContent = "Sorry, something went wrong. Please try again in a moment.";
+        statusEl.classList.add("status--error");
+      } finally {
+        submitBtn.disabled = false;
       }
-
-      statusEl.textContent = "Thank you! Your job has been posted and we’ll notify matching handymen shortly.";
-      statusEl.classList.add("status--success");
-      form.reset();
-    } catch (err) {
-      console.error(err);
-      statusEl.textContent = "Sorry, something went wrong. Please try again in a moment.";
-      statusEl.classList.add("status--error");
-    } finally {
-      submitBtn.disabled = false;
-    }
-  });
-</script>
+    });
+  </script>
 </body>
 </html>
