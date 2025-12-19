@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Post a Job | Find Your Next Handyman</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta
+    name="description"
+    content="Customers can post handyman jobs. Share the details once and local handymen can see and respond."
+  />
+
+  <link rel="icon" href="favicon.png" type="image/png" />
+  <link rel="stylesheet" href="styles.css" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"
+    rel="stylesheet"
+  />
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <div class="logo">Find Your Next Handyman</div>
+	  <button class="mobile-nav-toggle" aria-expanded="false" aria-label="Toggle navigation">
+		Menu
+	  </button> 
+      <nav class="main-nav">
+        <a href="index.html">Home</a>
+        <a href="browse-handymen.html">Browse handymen</a>
+        <a href="create-profile.html">I am a handyman</a>
+        <a href="browse-jobs.html">Browse jobs</a>
+      </nav>
+    </div>
+
+    <section class="hero container">
+      <div class="hero-text">
+        <p class="back-link">
+          <a href="index.html"
+             onclick="if (history.length > 1) { history.back(); return false; }">
+            ← Back
+          </a>
+        </p>
+
+        <p class="eyebrow">For customers</p>
+        <h1>I need a handyman – post a job</h1>
+
+        <p class="hero-subtitle">
+          This page is just for customers who need help with repairs, maintenance or small projects.
+          Share a few details about your job and we’ll make it visible to local handymen.
+        </p>
+
+        <div class="hero-actions">
+          <a
+            href="customer-job-request.html" class="btn-primary">
+			Post a Job
+          </a>
+
+          <a href="browse-jobs.html" class="btn ghost-btn">
+            View available jobs
+          </a>
+        </div>
+      </div>
+    </section>
+  </header>
+
+  <main>
+    <section class="section">
+      <div class="container get-started-layout">
+        <div>
+          <h2>What you’ll be asked</h2>
+          <p>
+            The form will ask for a clear description of the work, where you’re based,
+            and how and when you’d like to be contacted.
+          </p>
+
+          <div class="role-panels" style="margin-top: 1.5rem;">
+            <article class="role-panel">
+              <h2>Details that help handymen</h2>
+              <ul>
+                <li>A short job title (e.g. “Replace leaking kitchen tap”).</li>
+                <li>Your area or postcode (no full address needed yet).</li>
+                <li>Any photos or extra notes you think are useful.</li>
+                <li>When you’d ideally like the work done.</li>
+              </ul>
+              <p class="role-note">
+                The more specific you are, the easier it is for the right handyman to say yes.
+              </p>
+            </article>
+
+            <article class="role-panel">
+              <h2>What happens after you submit</h2>
+              <ul>
+                <li>Your job is stored securely in our system.</li>
+                <li>We review and approve suitable jobs.</li>
+                <li>Approved jobs appear on the public jobs list for handymen.</li>
+                <li>Handymen contact you directly using the details you provide.</li>
+              </ul>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>© 2025 Find Your Next Handyman · A platform by Lucky Aigbefoh</p>
+    </div>
+  </footer>
+  
+  <script src="script.js"></script>
+
+</body>
+</html>
