@@ -180,13 +180,13 @@
             <label for="mainService">Main Service <span class="required">*</span></label>
             <select id="mainService" name="mainService" required>
               <option value="">Select a service…</option>
-              <option>Electrician</option>
-              <option>Plumber</option>
-              <option>Carpenter</option>
-              <option>Painting</option>
-              <option>Handyman</option>
-              <option>General repairs</option>
-              <option>Furniture assembly</option>
+              <option value="Electrician">Electrician</option>
+              <option value="Plumber">Plumber</option>
+              <option value="Carpenter">Carpenter</option>
+              <option value="Painting">Painting</option>
+              <option value="Handyman">Handyman</option>
+              <option value="General repairs">General repairs</option>
+              <option value="Furniture assembly">Furniture assembly</option>
             </select>
           </div>
 
@@ -226,19 +226,18 @@
       statusEl.className = "status";
       submitBtn.disabled = true;
 
-      const otherServicesRaw = form.otherServices.value.trim();
       const payload = {
         name: form.name.value.trim(),
         email: form.email.value.trim(),
         phone: form.phone.value.trim(),
         mainService: form.mainService.value,
-        otherServices: otherServicesRaw,
+        otherServices: form.otherServices.value.trim(),
         experience: form.experience.value.trim(),
         areasCovered: form.areasCovered.value.trim()
       };
 
       try {
-        const res = await fetch(WORKER_URL, {https://handyman-profile-webhook.l-aigbefoh.workers.dev/})
+        const res = await fetch(WORKER_URL, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload)
@@ -253,7 +252,6 @@
         statusEl.classList.add("status--success");
         form.reset();
       } catch (err) {
-        console.error(err);
         statusEl.textContent = "Sorry, something went wrong. Please try again in a moment.";
         statusEl.classList.add("status--error");
       } finally {
