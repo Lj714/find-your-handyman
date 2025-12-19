@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Create a Handyman Profile | Find Your Next Handyman</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Create your handyman profile so customers can find and contact you." />
+
+  <link rel="icon" href="favicon.png?v=2" type="image/png" />
+  <link rel="stylesheet" href="styles.css" />
+
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f5f7fb;
+      margin: 0;
+      padding: 0;
+    }
+    .page-wrap {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    main {
+      flex: 1;
+    }
+    .topbar {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1rem 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .brand {
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      text-decoration: none;
+      color: #0f172a;
+    }
+    .nav a {
+      text-decoration: none;
+      color: #334155;
+      margin-left: 1rem;
+      font-weight: 600;
+    }
+    .hero {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2rem 1.25rem 0;
+    }
+    .hero h1 {
+      margin: 0 0 0.5rem;
+      font-size: 2rem;
+      letter-spacing: -0.02em;
+      color: #0f172a;
+    }
+    .hero p {
+      margin: 0 0 1rem;
+      color: #475569;
+      max-width: 60ch;
+    }
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.7rem 1.6rem;
+      border-radius: 999px;
+      border: none;
+      background: #2563eb;
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .form-shell {
+      max-width: 720px;
+      margin: 2rem auto 3rem;
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+      padding: 2rem 2.5rem;
+    }
+    .form-shell h2 {
+      margin-top: 0;
+      font-size: 1.5rem;
+      color: #0f172a;
+    }
+    .field-row {
+      margin-bottom: 1.2rem;
+    }
+    .field-row label {
+      display: block;
+      font-weight: 700;
+      margin-bottom: 0.35rem;
+      color: #0f172a;
+    }
+    .field-row input,
+    .field-row select,
+    .field-row textarea {
+      width: 100%;
+      padding: 0.6rem 0.8rem;
+      border-radius: 8px;
+      border: 1px solid #cbd5e1;
+      font-size: 0.95rem;
+      box-sizing: border-box;
+    }
+    .field-row textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+    .hint {
+      font-size: 0.82rem;
+      color: #64748b;
+      margin-top: 0.25rem;
+    }
+    .required {
+      color: #e11d48;
+    }
+    .status {
+      margin-top: 1rem;
+      font-size: 0.95rem;
+    }
+    .status--success {
+      color: #15803d;
+    }
+    .status--error {
+      color: #b91c1c;
+    }
+    .btn-primary:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page-wrap">
+    <header>
+      <div class="topbar">
+        <a class="brand" href="index.html">Find Your Next Handyman</a>
+        <nav class="nav">
+          <a href="get-started.html">Get Started</a>
+          <a href="browse-jobs.html">Browse Jobs</a>
+          <a href="browse-handymen.html">Browse Handymen</a>
+          <a href="create-profile.html">Create Profile</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <h1>Create your handyman profile</h1>
+        <p>Fill in the form below and your profile will be added to our directory. Once approved, you can start receiving matching job notifications.</p>
+        <a class="btn-primary" href="#profile-form">Create your profile</a>
+      </section>
+
+      <section class="form-shell" id="profile-form">
+        <h2>Handyman Profile Submission</h2>
+        <p class="hint">Fields marked with <span class="required">*</span> are required.</p>
+
+        <form id="profileForm">
+          <div class="field-row">
+            <label for="name">Name <span class="required">*</span></label>
+            <input id="name" name="name" type="text" required />
+          </div>
+
+          <div class="field-row">
+            <label for="email">Email <span class="required">*</span></label>
+            <input id="email" name="email" type="email" required />
+          </div>
+
+          <div class="field-row">
+            <label for="phone">Phone</label>
+            <input id="phone" name="phone" type="tel" />
+          </div>
+
+          <div class="field-row">
+            <label for="mainService">Main Service <span class="required">*</span></label>
+            <select id="mainService" name="mainService" required>
+              <option value="">Select a service…</option>
+              <option>Electrician</option>
+              <option>Plumber</option>
+              <option>Carpenter</option>
+              <option>Painting</option>
+              <option>Handyman</option>
+              <option>General repairs</option>
+              <option>Furniture assembly</option>
+            </select>
+            <div class="hint">These options must match your Airtable <strong>Main Service</strong> options exactly.</div>
+          </div>
+
+          <div class="field-row">
+            <label for="otherServices">Other Services</label>
+            <input id="otherServices" name="otherServices" type="text" placeholder="e.g. Painting, Tiling, Decorating" />
+            <div class="hint">Separate with commas.</div>
+          </div>
+
+          <div class="field-row">
+            <label for="experience">Experience</label>
+            <textarea id="experience" name="experience" placeholder="e.g. 10 years residential painting, commercial projects…"></textarea>
+          </div>
+
+          <div class="field-row">
+            <label for="areasCovered">Areas Covered</label>
+            <input id="areasCovered" name="areasCovered" type="text" placeholder="e.g. London, Maidstone, Kent" />
+          </div>
+
+          <button type="submit" class="btn-primary" id="submitBtn">Submit profile</button>
+          <div id="status" class="status" aria-live="polite"></div>
+        </form>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const WORKER_URL = "https://handyman-webhook-proxu.l-aigbefoh.workers.dev/profile";
+
+    const form = document.getElementById("profileForm");
+    const statusEl = document.getElementById("status");
+    const submitBtn = document.getElementById("submitBtn");
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      statusEl.textContent = "";
+      statusEl.className = "status";
+      submitBtn.disabled = true;
+
+      const otherServicesRaw = form.otherServices.value.trim();
+      const payload = {
+        name: form.name.value.trim(),
+        email: form.email.value.trim(),
+        phone: form.phone.value.trim(),
+        mainService: form.mainService.value,
+        otherServices: otherServicesRaw,
+        experience: form.experience.value.trim(),
+        areasCovered: form.areasCovered.value.trim()
+      };
+
+      try {
+        const res = await fetch(WORKER_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+
+        if (!res.ok) {
+          const text = await res.text().catch(() => "");
+          throw new Error("Request failed with status " + res.status + (text ? ": " + text : ""));
+        }
+
+        statusEl.textContent = "Thank you! Your profile has been submitted. We’ll review it and publish it once approved.";
+        statusEl.classList.add("status--success");
+        form.reset();
+      } catch (err) {
+        console.error(err);
+        statusEl.textContent = "Sorry, something went wrong. Please try again in a moment.";
+        statusEl.classList.add("status--error");
+      } finally {
+        submitBtn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
