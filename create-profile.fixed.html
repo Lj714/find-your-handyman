@@ -214,7 +214,7 @@
   </div>
 
   <script>
-    const WORKER_URL = "https://handyman-webhook-proxu.l-aigbefoh.workers.dev/profile";
+    const WORKER_URL = "https://handyman-profile-webhook.l-aigbefoh.workers.dev/";
 
     const form = document.getElementById("profileForm");
     const statusEl = document.getElementById("status");
@@ -238,7 +238,7 @@
       };
 
       try {
-        const res = await fetch(WORKER_URL, {
+        const res = await fetch(WORKER_URL, {https://handyman-profile-webhook.l-aigbefoh.workers.dev/})
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload)
