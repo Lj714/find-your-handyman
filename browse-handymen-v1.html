@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Browse Local Handymen | Find Your Next Handyman</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta
+    name="description"
+    content="Browse local handymen by service. Profiles are updated automatically from the platform."
+  />
+
+  <link rel="icon" href="favicon.png" type="image/png" />
+  <link rel="stylesheet" href="styles.css" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"
+    rel="stylesheet"
+  />
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <div class="logo">Find Your Next Handyman</div>
+	  <button class="mobile-nav-toggle" aria-expanded="false" aria-label="Toggle navigation">
+		Menu
+	  </button>
+      <nav class="main-nav">
+        <a href="index.html">Home</a>
+        <a href="get-started.updated.html" >Post a job</a>
+        <a href="create-profile.fixed.html">Create a profile</a>
+        <a href="browse-jobs-v1.html">Browse jobs</a>
+      </nav>
+    </div>
+
+    <section class="hero container">
+      <div class="hero-text">
+        <p class="back-link">
+          <a href="index.html"
+             onclick="if (history.length > 1) { history.back(); return false; }">
+            ← Back
+          </a>
+        </p>
+
+        <p class="eyebrow">Browse handymen</p>
+        <h1>Find a handyman by service</h1>
+        <p class="hero-subtitle">
+          Profiles on this page are loaded automatically from the platform.
+          As new handymen create profiles and are approved, they’ll appear here.
+        </p>
+      </div>
+    </section>
+  </header>
+
+  <main>
+    <section class="section">
+      <div class="container">
+        <h2>Handyman profiles</h2>
+        <p class="note" style="margin-bottom: 1rem;">
+          Search and filter profiles below. This page loads data from your Airtable base via your Cloudflare Worker (so visitors stay on your site).
+        </p>
+
+        <div class="filters" style="display:flex;gap:.75rem;flex-wrap:wrap;margin: 1rem 0;">
+          <input id="q" class="input" type="search" placeholder="Search name, services, area…" style="flex:1;min-width:220px;" />
+          <select id="service" class="input" style="min-width:220px;">
+            <option value="">All services</option>
+          </select>
+          <select id="area" class="input" style="min-width:220px;">
+            <option value="">All areas</option>
+          </select>
+          <button id="refresh" class="btn-primary" type="button">Refresh</button>
+        </div>
+
+        <div id="status" class="note" style="margin-bottom: .75rem;"></div>
+        <div id="profiles" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem;"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>© 2025 Find Your Next Handyman · A platform by Lucky Aigbefoh</p>
+    </div>
+  </footer>
+  
+  <script src="script.js"></script>
+  <script>
+    const API_BASE = "https://handyman-public-api-v4.l-aigbefoh.workers.dev";
+
+    const elQ = document.getElementById('q');
+    const elService = document.getElementById('service');
+    const elArea = document.getElementById('area');
+    const elProfiles = document.getElementById('profiles');
+    const elStatus = document.getElementById('status');
+    const elRefresh = document.getElementById('refresh');
+
+    function escapeHtml(str) {
+      return String(str ?? '')
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#39;');
+    }
+
+    function uniqSorted(arr) {
+      return Array.from(new Set(arr.filter(Boolean))).sort((a,b)=>a.localeCompare(b));
+    }
+
+    function renderCard(p) {
+      const name = escapeHtml(p.name);
+      const main = escapeHtml(p.mainService);
+      const other = escapeHtml(p.otherServices);
+      const area = escapeHtml(p.areasCovered);
+      const exp = escapeHtml(p.experience);
+
+      return `
+        <article style="background:#fff;border-radius:16px;box-shadow:0 10px 30px rgba(15,23,42,.08);padding:1rem;">
+          <h3 style="margin:.25rem 0 .5rem;font-size:1.05rem;">${name || 'Handyman'}</h3>
+          ${main ? `<div style="margin:.25rem 0;"><strong>Main service:</strong> ${main}</div>` : ''}
+          ${other ? `<div style="margin:.25rem 0;"><strong>Other services:</strong> ${other}</div>` : ''}
+          ${area ? `<div style="margin:.25rem 0;"><strong>Areas covered:</strong> ${area}</div>` : ''}
+          ${exp ? `<div style="margin:.5rem 0 0;color:#334155;">${exp}</div>` : ''}
+        </article>
+      `;
+    }
+
+    function applyFilters(rows) {
+      const q = elQ.value.trim().toLowerCase();
+      const svc = elService.value;
+      const area = elArea.value;
+
+      return rows.filter(r => {
+        if (svc && r.mainService !== svc) return false;
+        if (area && r.areasCovered !== area) return false;
+        if (!q) return true;
+        const blob = `${r.name} ${r.mainService} ${r.otherServices} ${r.areasCovered} ${r.experience}`.toLowerCase();
+        return blob.includes(q);
+      });
+    }
+
+    async function loadProfiles() {
+      elStatus.textContent = 'Loading profiles…';
+      elProfiles.innerHTML = '';
+
+      try {
+        const res = await fetch(`${API_BASE}/profiles`, { method: 'GET' });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        const rows = Array.isArray(data?.profiles) ? data.profiles : [];
+
+        // Populate filter dropdowns from data
+        const services = uniqSorted(rows.map(r => r.mainService));
+        const areas = uniqSorted(rows.map(r => r.areasCovered));
+
+        elService.innerHTML = `<option value="">All services</option>` + services.map(s => `<option>${escapeHtml(s)}</option>`).join('');
+        elArea.innerHTML = `<option value="">All areas</option>` + areas.map(a => `<option>${escapeHtml(a)}</option>`).join('');
+
+        const filtered = applyFilters(rows);
+        elProfiles.innerHTML = filtered.map(renderCard).join('') || `<div class="note">No profiles found.</div>`;
+        elStatus.textContent = `${filtered.length} profile(s) shown.`;
+      } catch (e) {
+        elStatus.textContent = 'Could not load profiles. Check your API worker URL and try again.';
+        elProfiles.innerHTML = '';
+        console.error(e);
+      }
+    }
+
+    elRefresh.addEventListener('click', loadProfiles);
+    elQ.addEventListener('input', () => loadProfiles());
+    elService.addEventListener('change', loadProfiles);
+    elArea.addEventListener('change', loadProfiles);
+
+    loadProfiles();
+  </script>
+
+</body>
+</html>
