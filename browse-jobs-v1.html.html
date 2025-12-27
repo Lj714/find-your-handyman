@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Browse Jobs | Find Your Next Handyman</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .controls{display:flex;gap:.75rem;flex-wrap:wrap;margin:1rem 0 1.25rem}
+    .controls input,.controls select{padding:.55rem .75rem;border:1px solid #cbd5e1;border-radius:10px;font-size:.95rem;min-width:220px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem}
+    .card{background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:1rem;box-shadow:0 10px 30px rgba(15,23,42,.06)}
+    .card h3{margin:0 0 .4rem;font-size:1.05rem}
+    .meta{color:#475569;font-size:.9rem;margin:.15rem 0}
+    .pill{display:inline-block;background:#eef2ff;color:#1d4ed8;padding:.18rem .55rem;border-radius:999px;font-size:.8rem;font-weight:600}
+    .empty{padding:1rem;background:#fff;border:1px dashed #cbd5e1;border-radius:16px;color:#475569}
+    .error{padding:1rem;background:#fff1f2;border:1px solid #fecdd3;border-radius:16px;color:#9f1239}
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="container nav-bar">
+      <div class="logo">Find Your Next Handyman</div>
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="get-started.html">Get Started</a>
+        <a href="browse-handymen.html">Browse Handymen</a>
+        <a href="browse-jobs.html" class="active">Browse Jobs</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="section">
+      <div class="container">
+        <h2>Available jobs</h2>
+        <p class="note" style="margin-bottom: 1rem;">These jobs are pulled from your Airtable base, but shown in your website UI.</p>
+
+        <div class="controls">
+          <input id="q" type="search" placeholder="Search title, location, or details…" />
+          <select id="service">
+            <option value="">All services</option>
+          </select>
+          <select id="sort">
+            <option value="newest">Newest first</option>
+            <option value="oldest">Oldest first</option>
+          </select>
+        </div>
+
+        <div id="status"></div>
+        <div id="grid" class="grid" aria-live="polite"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; <span id="year"></span> Find Your Next Handyman. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const API_BASE = "https://handyman-public-api-v4.l-aigbefoh.workers.dev";
+
+    const elQ = document.getElementById('q');
+    const elService = document.getElementById('service');
+    const elSort = document.getElementById('sort');
+    const elGrid = document.getElementById('grid');
+    const elStatus = document.getElementById('status');
+
+    let allJobs = [];
+
+    function escapeHtml(s){
+      return String(s ?? '').replace(/[&<>\"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;','\'':'&#39;'}[c]));
+    }
+
+    function setStatus(type, msg){
+      elStatus.className = type;
+      elStatus.textContent = msg;
+    }
+
+    function toServiceLabel(job){
+      return job.mainServiceNeeded || job.mainService || job.service || '';
+    }
+
+    function render(){
+      const q = elQ.value.trim().toLowerCase();
+      const svc = elService.value;
+      const sort = elSort.value;
+
+      let filtered = allJobs.filter(j => {
+        const hay = [j.jobTitle, j.location, j.jobDetails, j.preferredTiming, toServiceLabel(j)].join(' ').toLowerCase();
+        const matchesQ = !q || hay.includes(q);
+        const matchesSvc = !svc || toServiceLabel(j) === svc;
+        return matchesQ && matchesSvc;
+      });
+
+      filtered.sort((a,b) => {
+        const da = new Date(a.createdTime || a.created || a._createdTime || 0).getTime();
+        const db = new Date(b.createdTime || b.created || b._createdTime || 0).getTime();
+        return sort === 'oldest' ? (da - db) : (db - da);
+      });
+
+      if (filtered.length === 0){
+        elGrid.innerHTML = '';
+        setStatus('empty', 'No jobs match your filters yet.');
+        elStatus.className = 'empty';
+        return;
+      }
+
+      elStatus.className = '';
+      elStatus.textContent = '';
+
+      elGrid.innerHTML = filtered.map(j => {
+        const title = escapeHtml(j.jobTitle || 'Job');
+        const location = escapeHtml(j.location || '');
+        const details = escapeHtml(j.jobDetails || '');
+        const timing = escapeHtml(j.preferredTiming || '');
+        const service = escapeHtml(toServiceLabel(j) || '');
+        return `
+          <article class="card">
+            <h3>${title}</h3>
+            ${service ? `<div class="meta"><span class="pill">${service}</span></div>` : ''}
+            ${location ? `<div class="meta">📍 ${location}</div>` : ''}
+            ${timing ? `<div class="meta">🗓️ ${timing}</div>` : ''}
+            ${details ? `<div class="meta" style="margin-top:.5rem">${details}</div>` : ''}
+          </article>
+        `;
+      }).join('');
+    }
+
+    async function load(){
+      try{
+        setStatus('empty', 'Loading jobs…');
+        elStatus.className = 'empty';
+
+        const res = await fetch(`${API_BASE}/jobs`, { method: 'GET' });
+        if (!res.ok) throw new Error(`API failed (${res.status})`);
+
+        const data = await res.json();
+        allJobs = data.jobs || [];
+
+        const services = Array.from(new Set(allJobs.map(toServiceLabel).filter(Boolean))).sort();
+        for (const s of services){
+          const opt = document.createElement('option');
+          opt.value = s;
+          opt.textContent = s;
+          elService.appendChild(opt);
+        }
+
+        render();
+      }catch(err){
+        console.error(err);
+        elGrid.innerHTML = '';
+        elStatus.className = 'error';
+        elStatus.textContent = 'Could not load jobs. Check your API worker URL and that it returns JSON.';
+      }
+    }
+
+    elQ.addEventListener('input', render);
+    elService.addEventListener('change', render);
+    elSort.addEventListener('change', render);
+
+    load();
+  </script>
+</body>
+</html>
