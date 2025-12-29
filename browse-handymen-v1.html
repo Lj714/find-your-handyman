@@ -16,6 +16,25 @@
     href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"
     rel="stylesheet"
   />
+
+  <style>
+    .actions{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:.8rem}
+    .btn{display:inline-flex;align-items:center;justify-content:center;padding:.55rem 1rem;border-radius:999px;border:1px solid #cbd5e1;background:#fff;color:#0f172a;font-weight:600;cursor:pointer}
+    .btn-primary{background:#2563eb;border-color:#2563eb;color:#fff}
+    .btn-primary:disabled{opacity:.6;cursor:not-allowed}
+    .modal-backdrop{position:fixed;inset:0;background:rgba(2,6,23,.55);display:none;align-items:center;justify-content:center;padding:1rem;z-index:9999}
+    .modal{width:100%;max-width:520px;background:#fff;border-radius:16px;box-shadow:0 25px 60px rgba(15,23,42,.25);padding:1.25rem 1.25rem 1rem}
+    .modal h2{margin:.25rem 0 1rem;font-size:1.25rem}
+    .modal .row{margin-bottom:.85rem}
+    .modal label{display:block;font-weight:600;margin-bottom:.35rem}
+    .modal input,.modal textarea{width:100%;border:1px solid #cbd5e1;border-radius:10px;padding:.6rem .75rem;font-size:.95rem;box-sizing:border-box}
+    .modal textarea{min-height:110px;resize:vertical}
+    .modal .topbar{display:flex;align-items:center;justify-content:space-between;gap:.75rem}
+    .modal .close{border:none;background:transparent;font-size:1.4rem;cursor:pointer;line-height:1;padding:.25rem .4rem}
+    .modal .status{margin-top:.75rem;font-size:.95rem}
+    .status-success{color:#15803d}
+    .status-error{color:#b91c1c}
+  </style>
 </head>
 
 <body>
@@ -27,9 +46,9 @@
 	  </button>
       <nav class="main-nav">
         <a href="index.html">Home</a>
-        <a href="get-started.updated.html" >Post a job</a>
-        <a href="create-profile.fixed.html">Create a profile</a>
-        <a href="browse-jobs-v1.html">Browse jobs</a>
+        <a href="get-started.html" >Post a job</a>
+        <a href="create-profile.html">Create a profile</a>
+        <a href="browse-jobs.html">Browse jobs</a>
       </nav>
     </div>
 
@@ -85,7 +104,8 @@
   
   <script src="script.js"></script>
   <script>
-    const API_BASE = "https://handyman-public-api-v4.l-aigbefoh.workers.dev";
+	    const API_BASE = "https://handyman-public-api-v4.l-aigbefoh.workers.dev";
+	    const ENQUIRIES_WORKER_URL = "https://handyman-enquiries-webhook.l-aigbefoh.workers.dev/";
 
     const elQ = document.getElementById('q');
     const elService = document.getElementById('service');
@@ -107,20 +127,44 @@
       return Array.from(new Set(arr.filter(Boolean))).sort((a,b)=>a.localeCompare(b));
     }
 
+	    function normalizeProfiles(data) {
+	      if (Array.isArray(data?.profiles)) return data.profiles;
+	      if (Array.isArray(data?.records)) {
+	        return data.records.map((r) => {
+	          const f = r.fields || {};
+	          return {
+	            id: r.id,
+	            name: f["Name"],
+	            email: f["Email"],
+	            phone: f["Phone"],
+	            mainService: f["Main Service"],
+	            otherServices: f["Other Services"],
+	            experience: f["Experience"],
+	            areasCovered: f["Areas Covered"],
+	          };
+	        });
+	      }
+	      return [];
+	    }
+
     function renderCard(p) {
       const name = escapeHtml(p.name);
       const main = escapeHtml(p.mainService);
       const other = escapeHtml(p.otherServices);
       const area = escapeHtml(p.areasCovered);
       const exp = escapeHtml(p.experience);
+	      const recId = escapeHtml(p.id || p.recordId || p.recId || '');
 
-      return `
-        <article style="background:#fff;border-radius:16px;box-shadow:0 10px 30px rgba(15,23,42,.08);padding:1rem;">
+	      return `
+	        <article style="background:#fff;border-radius:16px;box-shadow:0 10px 30px rgba(15,23,42,.08);padding:1rem;">
           <h3 style="margin:.25rem 0 .5rem;font-size:1.05rem;">${name || 'Handyman'}</h3>
           ${main ? `<div style="margin:.25rem 0;"><strong>Main service:</strong> ${main}</div>` : ''}
           ${other ? `<div style="margin:.25rem 0;"><strong>Other services:</strong> ${other}</div>` : ''}
           ${area ? `<div style="margin:.25rem 0;"><strong>Areas covered:</strong> ${area}</div>` : ''}
           ${exp ? `<div style="margin:.5rem 0 0;color:#334155;">${exp}</div>` : ''}
+	          <div class="actions">
+	            <button class="btn btn-primary" type="button" data-action="contact" data-target="profile" data-record-id="${recId}" data-display-name="${name || 'Handyman'}">Contact me</button>
+	          </div>
         </article>
       `;
     }
@@ -139,15 +183,22 @@
       });
     }
 
-    async function loadProfiles() {
+	    function render() {
+	      const filtered = applyFilters(allRows);
+	      elProfiles.innerHTML = filtered.map(renderCard).join('') || `<div class="note">No profiles found.</div>`;
+	      elStatus.textContent = `${filtered.length} profile(s) shown.`;
+	    }
+
+	    async function loadProfiles() {
       elStatus.textContent = 'Loading profiles…';
       elProfiles.innerHTML = '';
 
       try {
         const res = await fetch(`${API_BASE}/profiles`, { method: 'GET' });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const data = await res.json();
-        const rows = Array.isArray(data?.profiles) ? data.profiles : [];
+	        const data = await res.json();
+	        const rows = normalizeProfiles(data);
+	        allRows = rows;
 
         // Populate filter dropdowns from data
         const services = uniqSorted(rows.map(r => r.mainService));
@@ -156,9 +207,7 @@
         elService.innerHTML = `<option value="">All services</option>` + services.map(s => `<option>${escapeHtml(s)}</option>`).join('');
         elArea.innerHTML = `<option value="">All areas</option>` + areas.map(a => `<option>${escapeHtml(a)}</option>`).join('');
 
-        const filtered = applyFilters(rows);
-        elProfiles.innerHTML = filtered.map(renderCard).join('') || `<div class="note">No profiles found.</div>`;
-        elStatus.textContent = `${filtered.length} profile(s) shown.`;
+	        render();
       } catch (e) {
         elStatus.textContent = 'Could not load profiles. Check your API worker URL and try again.';
         elProfiles.innerHTML = '';
@@ -166,13 +215,123 @@
       }
     }
 
-    elRefresh.addEventListener('click', loadProfiles);
-    elQ.addEventListener('input', () => loadProfiles());
-    elService.addEventListener('change', loadProfiles);
-    elArea.addEventListener('change', loadProfiles);
+	    elRefresh.addEventListener('click', loadProfiles);
+	    elQ.addEventListener('input', render);
+	    elService.addEventListener('change', render);
+	    elArea.addEventListener('change', render);
+
+	    const modal = document.getElementById('contactModal');
+	    const modalTitle = document.getElementById('contactModalTitle');
+	    const modalStatus = document.getElementById('contactStatus');
+	    const contactForm = document.getElementById('contactForm');
+	    const submitBtn = document.getElementById('contactSubmit');
+	    let activeProfileId = '';
+
+	    function openModal(name, profileId) {
+	      activeProfileId = profileId;
+	      modalTitle.textContent = `Contact ${name}`;
+	      modalStatus.textContent = '';
+	      modalStatus.className = 'modal-status';
+	      contactForm.reset();
+	      modal.classList.add('open');
+	    }
+
+	    function closeModal() {
+	      modal.classList.remove('open');
+	      activeProfileId = '';
+	    }
+
+	    document.addEventListener('click', (e) => {
+	      const btn = e.target.closest('[data-action="contact"]');
+	      if (btn) {
+	        const name = btn.getAttribute('data-profile-name') || 'Handyman';
+	        const recId = btn.getAttribute('data-profile-id') || '';
+	        if (!recId) {
+	          alert('Sorry — this profile is missing a record ID. Refresh the page and try again.');
+	          return;
+	        }
+	        openModal(name, recId);
+	      }
+	
+	      if (e.target.matches('[data-action="close-modal"]') || e.target === modal) {
+	        closeModal();
+	      }
+	    });
+
+	    document.addEventListener('keydown', (e) => {
+	      if (e.key === 'Escape') closeModal();
+	    });
+
+	    contactForm.addEventListener('submit', async (e) => {
+	      e.preventDefault();
+	      modalStatus.textContent = '';
+	      modalStatus.className = 'modal-status';
+	      submitBtn.disabled = true;
+
+	      const payload = {
+	        type: 'Contact Handyman',
+	        fromName: document.getElementById('fromName').value.trim(),
+	        fromEmail: document.getElementById('fromEmail').value.trim(),
+	        fromPhone: document.getElementById('fromPhone').value.trim(),
+	        message: document.getElementById('message').value.trim(),
+	        relatedProfileId: activeProfileId,
+	      };
+
+	      try {
+	        const res = await fetch(ENQUIRIES_WORKER_URL, {
+	          method: 'POST',
+	          headers: { 'Content-Type': 'application/json' },
+	          body: JSON.stringify(payload),
+	        });
+	        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+	        modalStatus.textContent = 'Sent! The handyman will receive your message by email.';
+	        modalStatus.classList.add('ok');
+	        setTimeout(closeModal, 900);
+	      } catch (err) {
+	        console.error(err);
+	        modalStatus.textContent = 'Sorry — something went wrong. Please try again.';
+	        modalStatus.classList.add('err');
+	      } finally {
+	        submitBtn.disabled = false;
+	      }
+	    });
 
     loadProfiles();
   </script>
+
+	  <div id="contactModal" class="modal" aria-hidden="true">
+	    <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="contactModalTitle">
+	      <div class="modal-header">
+	        <h2 id="contactModalTitle" class="modal-title">Contact</h2>
+	        <button type="button" class="modal-x" data-action="close-modal" aria-label="Close">×</button>
+	      </div>
+
+	      <form id="contactForm" class="modal-form">
+	        <label>
+	          Your name
+	          <input id="fromName" name="fromName" type="text" required />
+	        </label>
+	        <label>
+	          Your email
+	          <input id="fromEmail" name="fromEmail" type="email" required />
+	        </label>
+	        <label>
+	          Your phone
+	          <input id="fromPhone" name="fromPhone" type="tel" placeholder="Optional" />
+	        </label>
+	        <label>
+	          Message
+	          <textarea id="message" name="message" rows="5" required placeholder="What do you need help with?"></textarea>
+	        </label>
+
+	        <div class="modal-actions">
+	          <button type="button" class="btn" data-action="close-modal">Cancel</button>
+	          <button id="contactSubmit" type="submit" class="btn btn-primary">Send message</button>
+	        </div>
+	        <div id="contactStatus" class="modal-status" aria-live="polite"></div>
+	      </form>
+	    </div>
+	  </div>
 
 </body>
 </html>
