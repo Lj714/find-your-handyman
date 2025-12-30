@@ -2,316 +2,315 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Browse Jobs | Find Your Next Handyman</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Browse Jobs | Find Your Next Handyman</title>
   <link rel="stylesheet" href="styles.css" />
   <style>
-    .controls{display:flex;gap:.75rem;flex-wrap:wrap;margin:1rem 0 1.25rem}
-    .controls input,.controls select{padding:.55rem .75rem;border:1px solid #cbd5e1;border-radius:10px;font-size:.95rem;min-width:220px}
-    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem}
-    .card{background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:1rem;box-shadow:0 10px 30px rgba(15,23,42,.06)}
-    .card h3{margin:0 0 .4rem;font-size:1.05rem}
-    .meta{color:#475569;font-size:.9rem;margin:.15rem 0}
-    .pill{display:inline-block;background:#eef2ff;color:#1d4ed8;padding:.18rem .55rem;border-radius:999px;font-size:.8rem;font-weight:600}
-	    .actions{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:.8rem}
-	    .btn{display:inline-flex;align-items:center;justify-content:center;padding:.55rem 1rem;border-radius:999px;border:1px solid #cbd5e1;background:#fff;color:#0f172a;font-weight:600;cursor:pointer}
-	    .btn-primary{background:#2563eb;border-color:#2563eb;color:#fff}
-	    .btn:disabled{opacity:.6;cursor:not-allowed}
-	    .modal-overlay{position:fixed;inset:0;background:rgba(15,23,42,.55);display:none;align-items:center;justify-content:center;padding:1rem;z-index:9999}
-	    .modal{width:min(560px,100%);background:#fff;border-radius:18px;box-shadow:0 20px 60px rgba(15,23,42,.35);overflow:hidden}
-	    .modal header{padding:1rem 1.25rem;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between}
-	    .modal header h3{margin:0;font-size:1.05rem}
-	    .modal .body{padding:1rem 1.25rem}
-	    .modal label{display:block;font-weight:600;margin:.75rem 0 .35rem}
-	    .modal input,.modal textarea{width:100%;padding:.6rem .75rem;border:1px solid #cbd5e1;border-radius:10px;font-size:.95rem;box-sizing:border-box}
-	    .modal textarea{min-height:110px;resize:vertical}
-	    .modal .footer{padding:1rem 1.25rem;border-top:1px solid #e2e8f0;display:flex;gap:.6rem;justify-content:flex-end}
-	    .status{margin-top:.75rem;font-size:.9rem}
-	    .status.ok{color:#15803d}
-	    .status.err{color:#b91c1c}
-    .empty{padding:1rem;background:#fff;border:1px dashed #cbd5e1;border-radius:16px;color:#475569}
-    .error{padding:1rem;background:#fff1f2;border:1px solid #fecdd3;border-radius:16px;color:#9f1239}
+    body{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f5f7fb;margin:0;color:#0f172a;}
+    .container{max-width:1100px;margin:0 auto;padding:0 16px;}
+    header{padding:18px 0;}
+    nav{display:flex;align-items:center;justify-content:space-between;gap:16px;}
+    .brand{display:inline-flex;align-items:center;gap:10px;padding:10px 14px;border-radius:999px;background:#fff;border:1px solid #e2e8f0;font-weight:800;letter-spacing:.08em;}
+    .navlinks a{margin-left:10px;color:#1d4ed8;text-decoration:underline;}
+    h1{margin:26px 0 10px;font-size:34px;}
+    .sub{margin:0 0 18px;color:#475569;}
+    .controls{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0 18px;}
+    .input, select{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:10px 12px;font-size:14px;min-width:220px;}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px;padding:10px 0 40px;}
+    .card{background:#fff;border:1px solid #e2e8f0;border-radius:18px;padding:16px;box-shadow:0 10px 30px rgba(15,23,42,.06);display:flex;flex-direction:column;gap:10px;}
+    .title{font-size:18px;font-weight:800;margin:0;}
+    .pill{display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:6px 10px;background:#eff6ff;color:#1d4ed8;font-weight:700;font-size:12px;width:max-content;}
+    .meta{display:flex;flex-direction:column;gap:6px;color:#334155;font-size:14px;}
+    .desc{color:#475569;font-size:14px;line-height:1.4;}
+    .actions{margin-top:auto;display:flex;gap:10px;}
+    .btn{border:1px solid #e2e8f0;background:#fff;border-radius:999px;padding:10px 12px;font-weight:700;cursor:pointer;}
+    .btn-primary{border:none;background:#2563eb;color:#fff;}
+    footer{padding:18px 0;color:#334155;}
+    .status{margin-top:10px;font-size:14px;}
+    .status.ok{color:#15803d;}
+    .status.err{color:#b91c1c;}
+    .modal-overlay{position:fixed;inset:0;background:rgba(15,23,42,.55);display:none;align-items:center;justify-content:center;padding:16px;z-index:9999;}
+    .modal-overlay.open{display:flex;}
+    .modal{background:#fff;border-radius:18px;max-width:560px;width:100%;padding:18px 18px 14px;box-shadow:0 20px 60px rgba(15,23,42,.25);}
+    .modal-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:12px;}
+    .modal h2{margin:0;font-size:20px;}
+    .close{border:none;background:transparent;font-size:22px;cursor:pointer;line-height:1;}
+    .row{margin:10px 0;}
+    label{display:block;font-weight:700;margin:0 0 6px;}
+    input, textarea{width:100%;box-sizing:border-box;border:1px solid #cbd5e1;border-radius:12px;padding:10px 12px;font-size:14px;background:#fff;}
+    textarea{min-height:120px;resize:vertical;}
+    .modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:12px;}
   </style>
 </head>
-
 <body>
-  <header>
-    <div class="container nav-bar">
-      <div class="logo">Find Your Next Handyman</div>
-      <nav>
+  <header class="container">
+    <nav>
+      <div class="brand">FIND YOUR NEXT HANDYMAN</div>
+      <div class="navlinks">
         <a href="index.html">Home</a>
         <a href="get-started.html">Get Started</a>
         <a href="browse-handymen.html">Browse Handymen</a>
-        <a href="browse-jobs.html" class="active">Browse Jobs</a>
-      </nav>
-    </div>
+        <a href="browse-jobs.html">Browse Jobs</a>
+      </div>
+    </nav>
   </header>
 
-  <main>
-    <section class="section">
-      <div class="container">
-        <h2>Available jobs</h2>
-        <p class="note" style="margin-bottom: 1rem;">These jobs are pulled from your Airtable base, but shown in your website UI.</p>
+  <main class="container">
+    <h1>Available jobs</h1>
+    <p class="sub">These jobs are pulled from your Airtable base, but shown in your website UI.</p>
 
-        <div class="controls">
-          <input id="q" type="search" placeholder="Search title, location, or details…" />
-          <select id="service">
-            <option value="">All services</option>
-          </select>
-          <select id="sort">
-            <option value="newest">Newest first</option>
-            <option value="oldest">Oldest first</option>
-          </select>
-        </div>
+    <div class="controls">
+      <input class="input" id="q" type="search" placeholder="Search title, location, or details" />
+      <select id="serviceFilter"></select>
+      <select id="sort">
+        <option value="newest">Newest first</option>
+        <option value="oldest">Oldest first</option>
+        <option value="title">Title A → Z</option>
+      </select>
+    </div>
 
-        <div id="status"></div>
-        <div id="grid" class="grid" aria-live="polite"></div>
-      </div>
-    </section>
+    <div id="grid" class="grid" aria-live="polite"></div>
+    <div id="pageStatus" class="status"></div>
   </main>
 
-  <div class="modal-backdrop" id="contactJobBackdrop" aria-hidden="true">
-    <div class="modal" id="contactJobModal" role="dialog" aria-modal="true" aria-labelledby="contactJobTitle">
-      <button class="modal-x" type="button" id="contactJobClose" aria-label="Close">×</button>
-      <h2 id="contactJobTitle" style="margin:0 0 .25rem">Contact customer</h2>
-      <p style="margin:.25rem 0 1rem;color:#475569">Send an enquiry. Your message will be delivered to the customer.</p>
+  <footer class="container">© 2025 Find Your Next Handyman. All rights reserved.</footer>
+
+  <div id="contactOverlay" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="contactTitle">
+    <div class="modal">
+      <div class="modal-header">
+        <div>
+          <h2 id="contactTitle">Contact customer</h2>
+          <div id="contactSubtitle" class="sub" style="margin:6px 0 0;">Send an enquiry. Your message will be delivered to the customer.</div>
+        </div>
+        <button class="close" type="button" id="closeModal" aria-label="Close">×</button>
+      </div>
 
       <form id="contactForm">
-        <div class="field">
+        <input type="hidden" id="relatedJobId" name="relatedJobId" />
+
+        <div class="row">
           <label for="fromName">Your name</label>
           <input id="fromName" name="fromName" type="text" required />
         </div>
-        <div class="field">
+        <div class="row">
           <label for="fromEmail">Your email</label>
           <input id="fromEmail" name="fromEmail" type="email" required />
         </div>
-        <div class="field">
+        <div class="row">
           <label for="fromPhone">Your phone</label>
           <input id="fromPhone" name="fromPhone" type="tel" />
         </div>
-        <div class="field">
+        <div class="row">
           <label for="message">Message</label>
           <textarea id="message" name="message" required placeholder="Hi, I'm interested in this job..."></textarea>
         </div>
 
-        <input type="hidden" id="relatedJobId" name="relatedJobId" />
-
-        <div class="actions" style="margin-top:0">
-          <button class="btn btn-primary" id="contactSubmit" type="submit">Send enquiry</button>
-          <button class="btn" type="button" id="contactCancel">Cancel</button>
+        <div class="modal-actions">
+          <button type="button" class="btn" id="cancelBtn">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="sendBtn">Send enquiry</button>
         </div>
-        <div id="contactStatus" class="status" aria-live="polite"></div>
+
+        <div id="formStatus" class="status" aria-live="polite"></div>
       </form>
     </div>
   </div>
 
-  <footer>
-    <div class="container">
-      <p>&copy; <span id="year"></span> Find Your Next Handyman. All rights reserved.</p>
-    </div>
-  </footer>
+<script>
+  const API_BASE = "https://handyman-public-api-v4.l-aigbefoh.workers.dev/jobs";
+  const ENQUIRIES_WORKER = "https://handyman-enquiries-webhook.l-aigbefoh.workers.dev/";
 
-  <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
+  const grid = document.getElementById("grid");
+  const pageStatus = document.getElementById("pageStatus");
+  const qEl = document.getElementById("q");
+  const serviceFilter = document.getElementById("serviceFilter");
+  const sortEl = document.getElementById("sort");
 
-    const API_BASE = "https://handyman-public-api-v4.l-aigbefoh.workers.dev";
-	    const ENQUIRIES_WORKER_URL = "https://handyman-enquiries-webhook.l-aigbefoh.workers.dev/";
+  const overlay = document.getElementById("contactOverlay");
+  const closeModalBtn = document.getElementById("closeModal");
+  const cancelBtn = document.getElementById("cancelBtn");
+  const contactForm = document.getElementById("contactForm");
+  const relatedJobIdEl = document.getElementById("relatedJobId");
+  const contactSubtitle = document.getElementById("contactSubtitle");
+  const formStatus = document.getElementById("formStatus");
+  const sendBtn = document.getElementById("sendBtn");
 
-    const elQ = document.getElementById('q');
-    const elService = document.getElementById('service');
-    const elSort = document.getElementById('sort');
-    const elGrid = document.getElementById('grid');
-    const elStatus = document.getElementById('status');
+  let allJobs = [];
 
-    let allJobs = [];
+  function escapeHtml(s) {
+    return String(s ?? "")
+      .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;").replaceAll("'","&#039;");
+  }
 
-    function escapeHtml(s){
-      return String(s ?? '').replace(/[&<>\"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;','\'':'&#39;'}[c]));
+  function openModal({ jobId, title }) {
+    relatedJobIdEl.value = jobId;
+    contactSubtitle.textContent = `Send an enquiry about: ${title}`;
+    formStatus.textContent = "";
+    formStatus.className = "status";
+    overlay.classList.add("open");
+    document.getElementById("fromName").focus();
+  }
+
+  function closeModal() {
+    overlay.classList.remove("open");
+    contactForm.reset();
+    relatedJobIdEl.value = "";
+  }
+
+  closeModalBtn.addEventListener("click", closeModal);
+  cancelBtn.addEventListener("click", closeModal);
+  overlay.addEventListener("click", (e) => {
+    if (e.target === overlay) closeModal();
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && overlay.classList.contains("open")) closeModal();
+  });
+
+  function getField(job, name) {
+    return job?.fields?.[name] ?? "";
+  }
+
+  function buildServiceOptions(jobs) {
+    const services = new Set();
+    for (const j of jobs) {
+      const s = getField(j, "Main Service Needed") || getField(j, "Main Service") || "";
+      if (s) services.add(String(s));
+    }
+    const sorted = Array.from(services).sort((a,b)=>a.localeCompare(b));
+    serviceFilter.innerHTML = `<option value="">All services</option>` + sorted.map(s=>`<option value="${escapeHtml(s)}">${escapeHtml(s)}</option>`).join("");
+  }
+
+  function applyFilters() {
+    const q = qEl.value.trim().toLowerCase();
+    const service = serviceFilter.value;
+    const sort = sortEl.value;
+
+    let list = allJobs.slice();
+
+    if (service) {
+      list = list.filter(j => (getField(j, "Main Service Needed") || getField(j,"Main Service") || "").toString() === service);
     }
 
-	    function normalizeJobs(data){
-	      const rows = Array.isArray(data) ? data : (data.jobs || data.items || data.records || []);
-	      if (!Array.isArray(rows)) return [];
-	      return rows.map((r) => {
-	        if (r && r.fields) {
-	          const f = r.fields;
-	          return {
-	            id: r.id,
-	            jobTitle: f['Job Title'] || f.JobTitle || f.jobTitle,
-	            location: f.Location || f.location,
-	            jobDetails: f['Job Details'] || f.jobDetails,
-	            preferredTiming: f['Preferred Timing'] || f.preferredTiming,
-	            mainServiceNeeded: f['Main Service Needed'] || f.mainServiceNeeded,
-	            createdTime: r.createdTime
-	          };
-	        }
-	        return r;
-	      });
-	    }
-
-    function setStatus(type, msg){
-      elStatus.className = type;
-      elStatus.textContent = msg;
+    if (q) {
+      list = list.filter(j => {
+        const hay = [
+          getField(j, "Job Title"),
+          getField(j, "Location"),
+          getField(j, "Job Details"),
+          getField(j, "Preferred Timing"),
+          getField(j, "Main Service Needed"),
+        ].join(" ").toLowerCase();
+        return hay.includes(q);
+      });
     }
 
-    function toServiceLabel(job){
-      return job.mainServiceNeeded || job.mainService || job.service || '';
+    if (sort === "title") {
+      list.sort((a,b) => String(getField(a,"Job Title")).localeCompare(String(getField(b,"Job Title"))));
+    } else {
+      list.sort((a,b) => String(a.createdTime).localeCompare(String(b.createdTime)));
+      if (sort === "newest") list.reverse();
     }
 
-    function render(){
-      const q = elQ.value.trim().toLowerCase();
-      const svc = elService.value;
-      const sort = elSort.value;
+    render(list);
+  }
 
-      let filtered = allJobs.filter(j => {
-        const hay = [j.jobTitle, j.location, j.jobDetails, j.preferredTiming, toServiceLabel(j)].join(' ').toLowerCase();
-        const matchesQ = !q || hay.includes(q);
-        const matchesSvc = !svc || toServiceLabel(j) === svc;
-        return matchesQ && matchesSvc;
+  function render(list) {
+    if (!list.length) {
+      grid.innerHTML = "";
+      pageStatus.textContent = "No jobs match your filters.";
+      pageStatus.className = "status";
+      return;
+    }
+    pageStatus.textContent = "";
+    pageStatus.className = "status";
+
+    grid.innerHTML = list.map(job => {
+      const id = job.id;
+      const title = getField(job, "Job Title") || "Job";
+      const location = getField(job, "Location") || "";
+      const timing = getField(job, "Preferred Timing") || "";
+      const details = getField(job, "Job Details") || "";
+      const service = getField(job, "Main Service Needed") || getField(job, "Main Service") || "";
+
+      return `
+        <article class="card">
+          <h3 class="title">${escapeHtml(title)}</h3>
+          ${service ? `<div class="pill">${escapeHtml(service)}</div>` : ""}
+          <div class="meta">
+            ${location ? `<div>📍 ${escapeHtml(location)}</div>` : ""}
+            ${timing ? `<div>🗓️ ${escapeHtml(timing)}</div>` : ""}
+          </div>
+          ${details ? `<div class="desc">${escapeHtml(details)}</div>` : ""}
+          <div class="actions">
+            <button class="btn btn-primary contact-btn" type="button" data-job-id="${escapeHtml(id)}" data-job-title="${escapeHtml(title)}">Contact customer</button>
+          </div>
+        </article>
+      `;
+    }).join("");
+  }
+
+  grid.addEventListener("click", (e) => {
+    const btn = e.target.closest(".contact-btn");
+    if (!btn) return;
+    openModal({ jobId: btn.dataset.jobId, title: btn.dataset.jobTitle });
+  });
+
+  qEl.addEventListener("input", applyFilters);
+  serviceFilter.addEventListener("change", applyFilters);
+  sortEl.addEventListener("change", applyFilters);
+
+  contactForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    formStatus.textContent = "";
+    formStatus.className = "status";
+    sendBtn.disabled = true;
+
+    const payload = {
+      type: "Contact Customer",
+      fromName: contactForm.fromName.value.trim(),
+      fromEmail: contactForm.fromEmail.value.trim(),
+      fromPhone: contactForm.fromPhone.value.trim(),
+      message: contactForm.message.value.trim(),
+      relatedJobId: relatedJobIdEl.value
+    };
+
+    try {
+      const res = await fetch(ENQUIRIES_WORKER, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
       });
 
-      filtered.sort((a,b) => {
-        const da = new Date(a.createdTime || a.created || a._createdTime || 0).getTime();
-        const db = new Date(b.createdTime || b.created || b._createdTime || 0).getTime();
-        return sort === 'oldest' ? (da - db) : (db - da);
-      });
+      if (!res.ok) throw new Error("HTTP " + res.status);
 
-      if (filtered.length === 0){
-        elGrid.innerHTML = '';
-        setStatus('empty', 'No jobs match your filters yet.');
-        elStatus.className = 'empty';
-        return;
-      }
-
-      elStatus.className = '';
-      elStatus.textContent = '';
-
-	      elGrid.innerHTML = filtered.map(j => {
-        const title = escapeHtml(j.jobTitle || 'Job');
-        const location = escapeHtml(j.location || '');
-        const details = escapeHtml(j.jobDetails || '');
-        const timing = escapeHtml(j.preferredTiming || '');
-	        const service = escapeHtml(toServiceLabel(j) || '');
-	        const recId = escapeHtml(j.id || j.recordId || j.recId || '');
-        return `
-          <article class="card">
-            <h3>${title}</h3>
-            ${service ? `<div class="meta"><span class="pill">${service}</span></div>` : ''}
-            ${location ? `<div class="meta">📍 ${location}</div>` : ''}
-            ${timing ? `<div class="meta">🗓️ ${timing}</div>` : ''}
-	            ${details ? `<div class="meta" style="margin-top:.5rem">${details}</div>` : ''}
-	            <div class="actions">
-	              <button class="btn btn-primary" data-action="contact-job" data-job-id="${recId}" data-job-title="${title}">Contact customer</button>
-	            </div>
-          </article>
-        `;
-      }).join('');
+      formStatus.textContent = "Sent! We'll deliver your enquiry shortly.";
+      formStatus.classList.add("ok");
+      setTimeout(closeModal, 700);
+    } catch (err) {
+      console.error(err);
+      formStatus.textContent = "Sorry — something went wrong. Please try again.";
+      formStatus.classList.add("err");
+    } finally {
+      sendBtn.disabled = false;
     }
+  });
 
-    async function load(){
-      try{
-        setStatus('empty', 'Loading jobs…');
-        elStatus.className = 'empty';
-
-        const res = await fetch(`${API_BASE}/jobs`, { method: 'GET' });
-        if (!res.ok) throw new Error(`API failed (${res.status})`);
-
-	        const data = await res.json();
-	        allJobs = normalizeJobs(data);
-
-        const services = Array.from(new Set(allJobs.map(toServiceLabel).filter(Boolean))).sort();
-        for (const s of services){
-          const opt = document.createElement('option');
-          opt.value = s;
-          opt.textContent = s;
-          elService.appendChild(opt);
-        }
-
-        render();
-      }catch(err){
-        console.error(err);
-        elGrid.innerHTML = '';
-        elStatus.className = 'error';
-        elStatus.textContent = 'Could not load jobs. Check your API worker URL and that it returns JSON.';
-      }
+  async function load() {
+    try {
+      pageStatus.textContent = "Loading jobs…";
+      const res = await fetch(API_BASE + "/jobs");
+      const data = await res.json();
+      allJobs = Array.isArray(data?.records) ? data.records : (Array.isArray(data) ? data : []);
+      buildServiceOptions(allJobs);
+      applyFilters();
+    } catch (err) {
+      console.error(err);
+      pageStatus.textContent = "Could not load jobs. Please refresh.";
+      pageStatus.className = "status err";
     }
+  }
 
-	    elQ.addEventListener('input', render);
-    elService.addEventListener('change', render);
-    elSort.addEventListener('change', render);
-
-	    const modal = document.getElementById('contactJobModal');
-	    const modalTitle = document.getElementById('contactJobModalTitle');
-	    const modalStatus = document.getElementById('contactJobStatus');
-	    const modalForm = document.getElementById('contactJobForm');
-	    const modalClose = document.getElementById('contactJobClose');
-	    const modalBackdrop = document.getElementById('contactJobBackdrop');
-	    const modalJobId = document.getElementById('contactJobId');
-	    const modalSubmit = document.getElementById('contactJobSubmit');
-
-	    function openModal({ jobId, jobTitle }){
-	      modalJobId.value = jobId;
-	      modalTitle.textContent = `Contact customer about: ${jobTitle || 'Job'}`;
-	      modalStatus.textContent = '';
-	      modalStatus.className = '';
-	      modalForm.reset();
-	      modal.classList.add('open');
-	    }
-	    function closeModal(){ modal.classList.remove('open'); }
-	    modalClose.addEventListener('click', closeModal);
-	    modalBackdrop.addEventListener('click', closeModal);
-	    window.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeModal(); });
-
-	    elGrid.addEventListener('click', (e)=>{
-	      const btn = e.target.closest('button[data-action="contact-job"]');
-	      if(!btn) return;
-	      const jobId = btn.getAttribute('data-job-id');
-	      const jobTitle = btn.getAttribute('data-job-title');
-	      if(!jobId){
-	        alert('Sorry — this job is missing an Airtable record ID, so we cannot send an enquiry.');
-	        return;
-	      }
-	      openModal({ jobId, jobTitle });
-	    });
-
-	    modalForm.addEventListener('submit', async (e)=>{
-	      e.preventDefault();
-	      modalStatus.textContent = '';
-	      modalStatus.className = '';
-	      modalSubmit.disabled = true;
-	
-	      const payload = {
-	        type: 'Contact Customer',
-	        fromName: modalForm.fromName.value.trim(),
-	        fromEmail: modalForm.fromEmail.value.trim(),
-	        fromPhone: modalForm.fromPhone.value.trim(),
-	        message: modalForm.message.value.trim(),
-	        relatedJobId: modalJobId.value
-	      };
-	
-	      try{
-	        const res = await fetch(ENQUIRIES_WORKER_URL, {
-	          method: 'POST',
-	          headers: { 'Content-Type': 'application/json' },
-	          body: JSON.stringify(payload)
-	        });
-	        if(!res.ok){
-	          const txt = await res.text().catch(()=> '');
-	          throw new Error(`Request failed (${res.status}) ${txt}`);
-	        }
-	        modalStatus.textContent = 'Thanks! Your message has been sent.';
-	        modalStatus.className = 'success';
-	        setTimeout(closeModal, 900);
-	      }catch(err){
-	        console.error(err);
-	        modalStatus.textContent = 'Sorry, something went wrong sending your message. Please try again.';
-	        modalStatus.className = 'error';
-	      }finally{
-	        modalSubmit.disabled = false;
-	      }
-	    });
-
-    load();
-  </script>
+  load();
+</script>
 </body>
 </html>
