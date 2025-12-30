@@ -57,7 +57,6 @@
 
   <main class="container">
     <h1>Available jobs</h1>
-    <p class="sub">These jobs are pulled from your Airtable base, but shown in your website UI.</p>
 
     <div class="controls">
       <input class="input" id="q" type="search" placeholder="Search title, location, or details" />
@@ -116,7 +115,7 @@
   </div>
 
 <script>
-  const API_BASE = "https://handyman-public-api-v4.l-aigbefoh.workers.dev/jobs";
+  const API_BASE = "https://handyman-public-api-v4.l-aigbefoh.workers.dev";
   const ENQUIRIES_WORKER = "https://handyman-enquiries-webhook.l-aigbefoh.workers.dev/";
 
   const grid = document.getElementById("grid");
