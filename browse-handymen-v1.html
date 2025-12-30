@@ -48,16 +48,15 @@
       <div class="brand">FIND YOUR NEXT HANDYMAN</div>
       <div class="navlinks">
         <a href="index.html">Home</a>
-        <a href="get-started.html">Get Started</a>
-        <a href="browse-handymen.html">Browse Handymen</a>
-        <a href="browse-jobs.html">Browse Jobs</a>
+        <a href="get-started.updated.html">Get Started</a>
+        <a href="browse-handymen-v1.html">Browse Handymen</a>
+        <a href="browse-jobs-v1.html">Browse Jobs</a>
       </div>
     </nav>
   </header>
 
   <main class="container">
     <h1>Browse handymen</h1>
-    <p class="sub">These profiles are pulled from your Airtable base, but shown in your website UI.</p>
 
     <div class="controls">
       <input class="input" id="q" type="search" placeholder="Search name, location, services" />
@@ -116,7 +115,7 @@
   </div>
 
 <script>
-  const API_BASE = "https://handyman-public-api-v4.l-aigbefoh.workers.dev";
+  const API_BASE = "https://handyman-public-api-v4.l-aigbefoh.workers.dev/profiles";
   const ENQUIRIES_WORKER = "https://handyman-enquiries-webhook.l-aigbefoh.workers.dev/";
 
   const grid = document.getElementById("grid");
