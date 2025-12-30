@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Browse Jobs | Find Your Next Handyman</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    body{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f5f7fb;margin:0;color:#0f172a;}
+    .container{max-width:1100px;margin:0 auto;padding:0 16px;}
+    header{padding:18px 0;}
+    nav{display:flex;align-items:center;justify-content:space-between;gap:16px;}
+    .brand{display:inline-flex;align-items:center;gap:10px;padding:10px 14px;border-radius:999px;background:#fff;border:1px solid #e2e8f0;font-weight:800;letter-spacing:.08em;}
+    .navlinks a{margin-left:10px;color:#1d4ed8;text-decoration:underline;}
+    h1{margin:26px 0 10px;font-size:34px;}
+    .sub{margin:0 0 18px;color:#475569;}
+    .controls{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0 18px;}
+    .input, select{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:10px 12px;font-size:14px;min-width:220px;}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px;padding:10px 0 40px;}
+    .card{background:#fff;border:1px solid #e2e8f0;border-radius:18px;padding:16px;box-shadow:0 10px 30px rgba(15,23,42,.06);display:flex;flex-direction:column;gap:10px;}
+    .title{font-size:18px;font-weight:800;margin:0;}
+    .pill{display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:6px 10px;background:#eff6ff;color:#1d4ed8;font-weight:700;font-size:12px;width:max-content;}
+    .meta{display:flex;flex-direction:column;gap:6px;color:#334155;font-size:14px;}
+    .desc{color:#475569;font-size:14px;line-height:1.4;}
+    .actions{margin-top:auto;display:flex;gap:10px;}
+    .btn{border:1px solid #e2e8f0;background:#fff;border-radius:999px;padding:10px 12px;font-weight:700;cursor:pointer;}
+    .btn-primary{border:none;background:#2563eb;color:#fff;}
+    footer{padding:18px 0;color:#334155;}
+    .status{margin-top:10px;font-size:14px;}
+    .status.ok{color:#15803d;}
+    .status.err{color:#b91c1c;}
+    .modal-overlay{position:fixed;inset:0;background:rgba(15,23,42,.55);display:none;align-items:center;justify-content:center;padding:16px;z-index:9999;}
+    .modal-overlay.open{display:flex;}
+    .modal{background:#fff;border-radius:18px;max-width:560px;width:100%;padding:18px 18px 14px;box-shadow:0 20px 60px rgba(15,23,42,.25);}
+    .modal-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:12px;}
+    .modal h2{margin:0;font-size:20px;}
+    .close{border:none;background:transparent;font-size:22px;cursor:pointer;line-height:1;}
+    .row{margin:10px 0;}
+    label{display:block;font-weight:700;margin:0 0 6px;}
+    input, textarea{width:100%;box-sizing:border-box;border:1px solid #cbd5e1;border-radius:12px;padding:10px 12px;font-size:14px;background:#fff;}
+    textarea{min-height:120px;resize:vertical;}
+    .modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:12px;}
+  </style>
+</head>
+<body>
+  <header class="container">
+    <nav>
+      <div class="brand">FIND YOUR NEXT HANDYMAN</div>
+      <div class="navlinks">
+        <a href="index.html">Home</a>
+        <a href="get-started.html">Get Started</a>
+        <a href="browse-handymen.html">Browse Handymen</a>
+        <a href="browse-jobs.html">Browse Jobs</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="container">
+    <h1>Available jobs</h1>
+    <p class="sub">These jobs are pulled from your Airtable base, but shown in your website UI.</p>
+
+    <div class="controls">
+      <input class="input" id="q" type="search" placeholder="Search title, location, or details" />
+      <select id="serviceFilter"></select>
+      <select id="sort">
+        <option value="newest">Newest first</option>
+        <option value="oldest">Oldest first</option>
+        <option value="title">Title A → Z</option>
+      </select>
+    </div>
+
+    <div id="grid" class="grid" aria-live="polite"></div>
+    <div id="pageStatus" class="status"></div>
+  </main>
+
+  <footer class="container">© 2025 Find Your Next Handyman. All rights reserved.</footer>
+
+  <div id="contactOverlay" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="contactTitle">
+    <div class="modal">
+      <div class="modal-header">
+        <div>
+          <h2 id="contactTitle">Contact customer</h2>
+          <div id="contactSubtitle" class="sub" style="margin:6px 0 0;">Send an enquiry. Your message will be delivered to the customer.</div>
+        </div>
+        <button class="close" type="button" id="closeModal" aria-label="Close">×</button>
+      </div>
+
+      <form id="contactForm">
+        <input type="hidden" id="relatedJobId" name="relatedJobId" />
+
+        <div class="row">
+          <label for="fromName">Your name</label>
+          <input id="fromName" name="fromName" type="text" required />
+        </div>
+        <div class="row">
+          <label for="fromEmail">Your email</label>
+          <input id="fromEmail" name="fromEmail" type="email" required />
+        </div>
+        <div class="row">
+          <label for="fromPhone">Your phone</label>
+          <input id="fromPhone" name="fromPhone" type="tel" />
+        </div>
+        <div class="row">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" required placeholder="Hi, I'm interested in this job..."></textarea>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn" id="cancelBtn">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="sendBtn">Send enquiry</button>
+        </div>
+
+        <div id="formStatus" class="status" aria-live="polite"></div>
+      </form>
+    </div>
+  </div>
+
+<script>
+  const API_BASE = "https://handyman-public-api-v4.l-aigbefoh.workers.dev/jobs";
+  const ENQUIRIES_WORKER = "https://handyman-enquiries-webhook.l-aigbefoh.workers.dev/";
+
+  const grid = document.getElementById("grid");
+  const pageStatus = document.getElementById("pageStatus");
+  const qEl = document.getElementById("q");
+  const serviceFilter = document.getElementById("serviceFilter");
+  const sortEl = document.getElementById("sort");
+
+  const overlay = document.getElementById("contactOverlay");
+  const closeModalBtn = document.getElementById("closeModal");
+  const cancelBtn = document.getElementById("cancelBtn");
+  const contactForm = document.getElementById("contactForm");
+  const relatedJobIdEl = document.getElementById("relatedJobId");
+  const contactSubtitle = document.getElementById("contactSubtitle");
+  const formStatus = document.getElementById("formStatus");
+  const sendBtn = document.getElementById("sendBtn");
+
+  let allJobs = [];
+
+  function escapeHtml(s) {
+    return String(s ?? "")
+      .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;").replaceAll("'","&#039;");
+  }
+
+  function openModal({ jobId, title }) {
+    relatedJobIdEl.value = jobId;
+    contactSubtitle.textContent = `Send an enquiry about: ${title}`;
+    formStatus.textContent = "";
+    formStatus.className = "status";
+    overlay.classList.add("open");
+    document.getElementById("fromName").focus();
+  }
+
+  function closeModal() {
+    overlay.classList.remove("open");
+    contactForm.reset();
+    relatedJobIdEl.value = "";
+  }
+
+  closeModalBtn.addEventListener("click", closeModal);
+  cancelBtn.addEventListener("click", closeModal);
+  overlay.addEventListener("click", (e) => {
+    if (e.target === overlay) closeModal();
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && overlay.classList.contains("open")) closeModal();
+  });
+
+  function getField(job, name) {
+    return job?.fields?.[name] ?? "";
+  }
+
+  function buildServiceOptions(jobs) {
+    const services = new Set();
+    for (const j of jobs) {
+      const s = getField(j, "Main Service Needed") || getField(j, "Main Service") || "";
+      if (s) services.add(String(s));
+    }
+    const sorted = Array.from(services).sort((a,b)=>a.localeCompare(b));
+    serviceFilter.innerHTML = `<option value="">All services</option>` + sorted.map(s=>`<option value="${escapeHtml(s)}">${escapeHtml(s)}</option>`).join("");
+  }
+
+  function applyFilters() {
+    const q = qEl.value.trim().toLowerCase();
+    const service = serviceFilter.value;
+    const sort = sortEl.value;
+
+    let list = allJobs.slice();
+
+    if (service) {
+      list = list.filter(j => (getField(j, "Main Service Needed") || getField(j,"Main Service") || "").toString() === service);
+    }
+
+    if (q) {
+      list = list.filter(j => {
+        const hay = [
+          getField(j, "Job Title"),
+          getField(j, "Location"),
+          getField(j, "Job Details"),
+          getField(j, "Preferred Timing"),
+          getField(j, "Main Service Needed"),
+        ].join(" ").toLowerCase();
+        return hay.includes(q);
+      });
+    }
+
+    if (sort === "title") {
+      list.sort((a,b) => String(getField(a,"Job Title")).localeCompare(String(getField(b,"Job Title"))));
+    } else {
+      list.sort((a,b) => String(a.createdTime).localeCompare(String(b.createdTime)));
+      if (sort === "newest") list.reverse();
+    }
+
+    render(list);
+  }
+
+  function render(list) {
+    if (!list.length) {
+      grid.innerHTML = "";
+      pageStatus.textContent = "No jobs match your filters.";
+      pageStatus.className = "status";
+      return;
+    }
+    pageStatus.textContent = "";
+    pageStatus.className = "status";
+
+    grid.innerHTML = list.map(job => {
+      const id = job.id;
+      const title = getField(job, "Job Title") || "Job";
+      const location = getField(job, "Location") || "";
+      const timing = getField(job, "Preferred Timing") || "";
+      const details = getField(job, "Job Details") || "";
+      const service = getField(job, "Main Service Needed") || getField(job, "Main Service") || "";
+
+      return `
+        <article class="card">
+          <h3 class="title">${escapeHtml(title)}</h3>
+          ${service ? `<div class="pill">${escapeHtml(service)}</div>` : ""}
+          <div class="meta">
+            ${location ? `<div>📍 ${escapeHtml(location)}</div>` : ""}
+            ${timing ? `<div>🗓️ ${escapeHtml(timing)}</div>` : ""}
+          </div>
+          ${details ? `<div class="desc">${escapeHtml(details)}</div>` : ""}
+          <div class="actions">
+            <button class="btn btn-primary contact-btn" type="button" data-job-id="${escapeHtml(id)}" data-job-title="${escapeHtml(title)}">Contact customer</button>
+          </div>
+        </article>
+      `;
+    }).join("");
+  }
+
+  grid.addEventListener("click", (e) => {
+    const btn = e.target.closest(".contact-btn");
+    if (!btn) return;
+    openModal({ jobId: btn.dataset.jobId, title: btn.dataset.jobTitle });
+  });
+
+  qEl.addEventListener("input", applyFilters);
+  serviceFilter.addEventListener("change", applyFilters);
+  sortEl.addEventListener("change", applyFilters);
+
+  contactForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    formStatus.textContent = "";
+    formStatus.className = "status";
+    sendBtn.disabled = true;
+
+    const payload = {
+      type: "Contact Customer",
+      fromName: contactForm.fromName.value.trim(),
+      fromEmail: contactForm.fromEmail.value.trim(),
+      fromPhone: contactForm.fromPhone.value.trim(),
+      message: contactForm.message.value.trim(),
+      relatedJobId: relatedJobIdEl.value
+    };
+
+    try {
+      const res = await fetch(ENQUIRIES_WORKER, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+
+      if (!res.ok) throw new Error("HTTP " + res.status);
+
+      formStatus.textContent = "Sent! We'll deliver your enquiry shortly.";
+      formStatus.classList.add("ok");
+      setTimeout(closeModal, 700);
+    } catch (err) {
+      console.error(err);
+      formStatus.textContent = "Sorry — something went wrong. Please try again.";
+      formStatus.classList.add("err");
+    } finally {
+      sendBtn.disabled = false;
+    }
+  });
+
+  async function load() {
+    try {
+      pageStatus.textContent = "Loading jobs…";
+      const res = await fetch(API_BASE + "/jobs");
+      const data = await res.json();
+      allJobs = Array.isArray(data?.records) ? data.records : (Array.isArray(data) ? data : []);
+      buildServiceOptions(allJobs);
+      applyFilters();
+    } catch (err) {
+      console.error(err);
+      pageStatus.textContent = "Could not load jobs. Please refresh.";
+      pageStatus.className = "status err";
+    }
+  }
+
+  load();
+</script>
+</body>
+</html>
