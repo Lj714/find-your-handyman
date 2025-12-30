@@ -299,8 +299,10 @@
     try {
       pageStatus.textContent = "Loading jobs…";
       const res = await fetch(API_BASE + "/jobs");
+      if (!res.ok) throw new Error(`API ${res.status}: ${await res.text()}`);
       const data = await res.json();
-      allJobs = Array.isArray(data?.records) ? data.records : (Array.isArray(data) ? data : []);
+      const list = (data && (data.records ?? data.jobs ?? data.profiles ?? data)) || [];
+      allJobs = Array.isArray(list) ? list : [];
       buildServiceOptions(allJobs);
       applyFilters();
     } catch (err) {

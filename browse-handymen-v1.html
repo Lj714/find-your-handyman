@@ -299,8 +299,10 @@
     try {
       pageStatus.textContent = "Loading profiles…";
       const res = await fetch(API_BASE + "/profiles");
+      if (!res.ok) throw new Error(`API ${res.status}: ${await res.text()}`);
       const data = await res.json();
-      allProfiles = Array.isArray(data?.records) ? data.records : (Array.isArray(data) ? data : []);
+      const list = (data && (data.records ?? data.profiles ?? data.jobs ?? data)) || [];
+      allProfiles = Array.isArray(list) ? list : [];
       buildServiceOptions(allProfiles);
       applyFilters();
     } catch (err) {
