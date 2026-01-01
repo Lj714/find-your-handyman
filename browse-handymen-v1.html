@@ -166,8 +166,34 @@
     if (e.key === "Escape" && overlay.classList.contains("open")) closeModal();
   });
 
-  function getField(p, name) {
-    return p?.fields?.[name] ?? "";
+  function getField(obj, key) {
+    if (!obj) return "";
+
+    // Airtable API shape: { fields: {...} }
+    if (obj.fields && obj.fields[key] !== undefined && obj.fields[key] !== null) {
+      return obj.fields[key];
+    }
+
+    // Flattened Worker shape: { name, email, ... }
+    const map = {
+      "Name": "name",
+      "Email": "email",
+      "Phone": "phone",
+      "Main Service": "mainService",
+      "Other Services": "otherServices",
+      "Experience": "experience",
+      "Areas Covered": "areasCovered",
+      "Approved": "approved",
+      "All Services Text": "allServicesText",
+    };
+
+    const prop = map[key];
+    if (prop && obj[prop] !== undefined && obj[prop] !== null) {
+      return obj[prop];
+    }
+
+    // Fallback: direct key access
+    return obj[key] ?? "";
   }
 
   function buildServiceOptions(list) {

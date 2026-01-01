@@ -166,8 +166,33 @@
     if (e.key === "Escape" && overlay.classList.contains("open")) closeModal();
   });
 
-  function getField(job, name) {
-    return job?.fields?.[name] ?? "";
+  function getField(obj, key) {
+    if (!obj) return "";
+
+    if (obj.fields && obj.fields[key] !== undefined && obj.fields[key] !== null) {
+      return obj.fields[key];
+    }
+
+    const map = {
+      "Job Title": "jobTitle",
+      "Location": "location",
+      "Job Details": "jobDetails",
+      "Preferred Timing": "preferredTiming",
+      "Main Service Needed": "mainServiceNeeded",
+      "Customer Name": "customerName",
+      "Email": "email",
+      "Phone": "phone",
+      "Approved": "approved",
+      "Created Time": "createdTime"
+    };
+
+    const prop = map[key];
+    let val = (prop && obj[prop] !== undefined && obj[prop] !== null) ? obj[prop] : (obj[key] ?? "");
+
+    if (Array.isArray(val)) {
+      return val.map(v => (typeof v === 'string' ? v : (v?.name || v?.id || ''))).filter(Boolean).join(', ');
+    }
+    return val;
   }
 
   function buildServiceOptions(jobs) {
