@@ -1,0 +1,340 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>My Account — Find Your Next Handyman</title>
+  <style>
+    body { font-family: system-ui, Arial; background:#f6f7fb; margin:0; }
+    .wrap { max-width: 760px; margin: 40px auto; background:#fff; padding:24px; border-radius:16px; box-shadow:0 10px 30px rgba(0,0,0,.06); }
+    h1 { margin:0 0 6px 0; }
+    p { margin: 0 0 16px 0; color:#444; }
+    label { display:block; margin:14px 0 6px; font-weight:600; }
+    input, textarea { width:100%; padding:12px 14px; border:1px solid #ddd; border-radius:10px; box-sizing:border-box; }
+    textarea { min-height: 90px; resize: vertical; }
+    button { margin-top:12px; padding:12px 14px; border:0; border-radius:10px; background:#1f59ff; color:#fff; font-weight:700; cursor:pointer; }
+    button.secondary { background:#eee; color:#111; }
+    button.danger { background:#c62828; }
+    .row { display:flex; gap:12px; align-items:flex-end; }
+    .row > div { flex:1; }
+    .status { margin-top:14px; padding:12px; border-radius:10px; background:#f2f6ff; border:1px solid #d7e3ff; color:#143c9f; }
+    .tokenBox { margin-top:10px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12px; word-break: break-all; background:#fafafa; border:1px solid #eee; padding:10px; border-radius:10px; display:none; }
+    .divider { height:1px; background:#eee; margin:22px 0; }
+    .muted { color:#666; font-size:13px; }
+    .grid2 { display:grid; grid-template-columns: 1fr 1fr; gap:12px; }
+    @media (max-width: 720px) {
+      .row { flex-direction:column; align-items:stretch; }
+      .row > div { max-width:none !important; }
+      .grid2 { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>My Account</h1>
+    <p>Sign in with email + one-time code (OTP).</p>
+
+    <div class="row">
+      <div>
+        <label>Email</label>
+        <input id="email" placeholder="you@example.com" autocomplete="email" />
+      </div>
+      <div style="max-width:220px;">
+        <button id="sendBtn" type="button">Send code</button>
+      </div>
+    </div>
+
+    <div class="row">
+      <div>
+        <label>OTP code</label>
+        <input id="otp" placeholder="6-digit code" inputmode="numeric" autocomplete="one-time-code" />
+      </div>
+      <div style="max-width:220px;">
+        <button id="verifyBtn" type="button">Verify</button>
+      </div>
+    </div>
+
+    <div class="row" style="margin-top:8px;">
+      <div style="max-width:220px;">
+        <button class="secondary" id="logoutBtn" type="button" style="display:none;">Log out</button>
+      </div>
+      <div style="max-width:220px;">
+        <button class="danger" id="deleteBtn" type="button" style="display:none;">Delete my profile</button>
+      </div>
+    </div>
+
+    <div class="status" id="status">Not signed in.</div>
+    <div class="tokenBox" id="tokenBox"></div>
+
+    <div class="divider"></div>
+
+    <div id="profileWrap" style="display:none;">
+      <h2 style="margin:0 0 6px 0;">My Profile</h2>
+      <div class="muted" style="margin-bottom:12px;">Edit your profile details and save.</div>
+
+      <div class="grid2">
+        <div>
+          <label>Name</label>
+          <input id="p_name" type="text" />
+        </div>
+        <div>
+          <label>Phone</label>
+          <input id="p_phone" type="text" />
+        </div>
+      </div>
+
+      <div class="grid2">
+        <div>
+          <label>Location</label>
+          <input id="p_location" type="text" />
+        </div>
+        <div>
+          <label>Services</label>
+          <input id="p_services" type="text" placeholder="e.g. plumbing, painting, tiling" />
+        </div>
+      </div>
+
+      <label>Bio</label>
+      <textarea id="p_bio" placeholder="A short description of what you do"></textarea>
+
+      <button id="saveProfileBtn" type="button" style="background:#111;">Save profile</button>
+      <div id="profileMsg" style="margin-top:10px; font-size:13px;"></div>
+    </div>
+  </div>
+
+  <script>
+    const WORKER_BASE = "https://handyman-auth-otp.l-aigbefoh.workers.dev";
+
+    const els = {
+      email: document.getElementById("email"),
+      otp: document.getElementById("otp"),
+      sendBtn: document.getElementById("sendBtn"),
+      verifyBtn: document.getElementById("verifyBtn"),
+      logoutBtn: document.getElementById("logoutBtn"),
+      deleteBtn: document.getElementById("deleteBtn"),
+      status: document.getElementById("status"),
+      tokenBox: document.getElementById("tokenBox"),
+      profileWrap: document.getElementById("profileWrap"),
+      profileMsg: document.getElementById("profileMsg"),
+      p_name: document.getElementById("p_name"),
+      p_phone: document.getElementById("p_phone"),
+      p_location: document.getElementById("p_location"),
+      p_services: document.getElementById("p_services"),
+      p_bio: document.getElementById("p_bio"),
+      saveProfileBtn: document.getElementById("saveProfileBtn"),
+    };
+
+    function setStatus(msg) {
+      els.status.textContent = msg;
+    }
+
+    function getToken() {
+      return localStorage.getItem("auth_token") || "";
+    }
+
+    function setToken(token) {
+      localStorage.setItem("auth_token", token);
+    }
+
+    function clearToken() {
+      localStorage.removeItem("auth_token");
+    }
+
+    function authHeaders(token) {
+      return { "Authorization": "Bearer " + token };
+    }
+
+    function showLoggedInUI(token) {
+      els.logoutBtn.style.display = "inline-block";
+      els.deleteBtn.style.display = "inline-block";
+      els.tokenBox.style.display = "block";
+      els.tokenBox.textContent = "Token:\n" + token;
+      setStatus("Signed in.");
+    }
+
+    function showLoggedOutUI() {
+      els.logoutBtn.style.display = "none";
+      els.deleteBtn.style.display = "none";
+      els.tokenBox.style.display = "none";
+      els.tokenBox.textContent = "";
+      els.profileWrap.style.display = "none";
+      els.profileMsg.textContent = "";
+      setStatus("Not signed in.");
+    }
+
+    async function loadProfile() {
+      const token = getToken();
+      if (!token) return;
+
+      els.profileWrap.style.display = "block";
+      els.profileMsg.textContent = "Loading profile...";
+
+      let res;
+      try {
+        res = await fetch(WORKER_BASE + "/me", {
+          method: "GET",
+          headers: {
+            "Authorization": "Bearer " + token,
+            "Accept": "application/json",
+          },
+        });
+      } catch {
+        els.profileMsg.textContent = "Network error loading profile.";
+        return;
+      }
+
+      let data;
+      try {
+        data = await res.json();
+      } catch {
+        els.profileMsg.textContent = "Unexpected response loading profile.";
+        return;
+      }
+
+      if (!res.ok || !data.ok || !data.profile) {
+        els.profileMsg.textContent = (data && data.error) ? data.error : "Could not load profile.";
+        return;
+      }
+
+      const p = data.profile;
+      els.profileName.value = p.name || "";
+      els.profilePhone.value = p.phone || "";
+      els.profileLocation.value = p.location || "";
+      els.profileBio.value = p.bio || "";
+      els.profileServices.value = Array.isArray(p.services) ? p.services.join(", ") : "";
+      els.profileMsg.textContent = "Profile loaded.";
+    }
+
+    async function saveProfile() {
+      const token = getToken();
+      if (!token) return;
+
+      els.profileMsg.textContent = "Saving...";
+
+      const services = (els.p_services.value || "")
+        .split(",")
+        .map(s => s.trim())
+        .filter(Boolean);
+
+      const payload = {
+        name: els.p_name.value.trim(),
+        phone: els.p_phone.value.trim(),
+        location: els.p_location.value.trim(),
+        services,
+        bio: els.p_bio.value.trim(),
+      };
+
+      const res = await fetch(WORKER_BASE + "/me", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...authHeaders(token),
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok || !data || !data.ok) {
+        els.profileMsg.textContent = "Save failed.";
+        return;
+      }
+
+      els.profileMsg.textContent = "Saved.";
+    }
+
+    async function logout() {
+      const token = getToken();
+      if (!token) {
+        clearToken();
+        showLoggedOutUI();
+        return;
+      }
+
+      await fetch(WORKER_BASE + "/logout", {
+        method: "POST",
+        headers: authHeaders(token),
+      }).catch(() => {});
+
+      clearToken();
+      showLoggedOutUI();
+    }
+
+    async function deleteMe() {
+      const token = getToken();
+      if (!token) return;
+
+      els.profileMsg.textContent = "Deleting...";
+
+      const res = await fetch(WORKER_BASE + "/delete-me", {
+        method: "POST",
+        headers: authHeaders(token),
+      }).catch(() => null);
+
+      clearToken();
+      showLoggedOutUI();
+
+      if (!res || !res.ok) {
+        setStatus("Deleted locally, but server deletion may have failed. Try again.");
+        return;
+      }
+
+      setStatus("Profile deleted.");
+    }
+
+    els.sendBtn.addEventListener("click", async () => {
+      const email = els.email.value.trim();
+      if (!email) return setStatus("Enter an email first.");
+
+      setStatus("Sending code...");
+      try {
+        const res = await fetch(WORKER_BASE + "/request-otp", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email }),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || !data.ok) return setStatus("Error sending code.");
+        setStatus("Code sent. Check your email, then enter it below.");
+      } catch (e) {
+        setStatus("Network error sending code.");
+      }
+    });
+
+    els.verifyBtn.addEventListener("click", async () => {
+      const email = els.email.value.trim();
+      const otp = els.otp.value.trim();
+      if (!email) return setStatus("Enter your email.");
+      if (!otp) return setStatus("Enter the OTP code.");
+
+      setStatus("Verifying...");
+      try {
+        const res = await fetch(WORKER_BASE + "/verify-otp", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, otp }),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || !data.ok || !data.verified || !data.token) return setStatus("Invalid OTP. Try again.");
+        setToken(data.token);
+        showLoggedInUI(data.token);
+        await loadProfile();
+      } catch (e) {
+        setStatus("Network error verifying code.");
+      }
+    });
+
+    els.logoutBtn.addEventListener("click", logout);
+    els.deleteBtn.addEventListener("click", deleteMe);
+    els.saveProfileBtn.addEventListener("click", saveProfile);
+
+    window.addEventListener("load", async () => {
+      const token = getToken();
+      if (!token) return;
+
+      showLoggedInUI(token);
+      await loadProfile();
+    });
+  </script>
+</body>
+</html>
