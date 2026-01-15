@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>My Account</title>
+  <style>
+    :root{
+      --bg:#f5f7fb; --card:#fff; --text:#0f172a; --muted:#64748b; --border:#e2e8f0; --primary:#1d4ed8;
+      --radius:18px;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
+    .wrap{max-width:980px;margin:40px auto;padding:0 16px}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:28px;box-shadow:0 10px 30px rgba(15,23,42,.06)}
+    h1{margin:0 0 6px;font-size:42px;letter-spacing:-.02em}
+    p{margin:0 0 18px;color:var(--muted)}
+    .grid{display:grid;grid-template-columns:1fr;gap:16px}
+    @media(min-width:920px){.grid{grid-template-columns:1fr 1fr}}
+    label{display:block;font-weight:600;margin:12px 0 6px}
+    input,textarea{width:100%;padding:12px 14px;border:1px solid var(--border);border-radius:12px;font-size:16px;background:#fff}
+    textarea{min-height:110px;resize:vertical}
+    .row{display:flex;gap:10px;align-items:center}
+    .row .grow{flex:1}
+    .btn{border:0;border-radius:12px;padding:11px 14px;font-weight:700;cursor:pointer}
+    .btn.primary{background:var(--primary);color:#fff}
+    .btn.ghost{background:#eef2ff;color:#1e3a8a}
+    .btn.danger{background:#fee2e2;color:#991b1b}
+    .btn.gray{background:#f1f5f9;color:#0f172a}
+    .muted{color:var(--muted);font-size:14px}
+    .status{margin-top:14px;padding:12px 14px;border-radius:12px;border:1px solid #c7d2fe;background:#eef2ff;color:#1e3a8a}
+    .hide{display:none}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;font-size:13px}
+    .divider{height:1px;background:var(--border);margin:18px 0}
+    .topbar{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+    .pill{padding:6px 10px;border-radius:999px;border:1px solid var(--border);background:#fff}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <div class="topbar">
+        <div>
+          <h1>My Account</h1>
+          <p>Sign in with email + one-time code (OTP).</p>
+        </div>
+        <div class="pill muted">Auth API: <span class="mono" id="apiBase"></span></div>
+      </div>
+
+      <div id="loginBox">
+        <label for="email">Email</label>
+        <div class="row">
+          <input class="grow" id="email" type="email" placeholder="you@example.com" autocomplete="email" />
+          <button class="btn primary" id="btnSend">Send code</button>
+        </div>
+
+        <label for="otp">OTP code</label>
+        <div class="row">
+          <input class="grow" id="otp" type="text" inputmode="numeric" placeholder="6-digit code" />
+          <button class="btn primary" id="btnVerify">Verify</button>
+        </div>
+
+        <div class="row" style="margin-top:10px">
+          <button class="btn gray" id="btnLogout">Log out</button>
+          <div class="muted">If you are already signed in, this clears your saved token.</div>
+        </div>
+
+        <div id="status" class="status hide"></div>
+        <div class="divider"></div>
+        <div class="muted">Token (saved in this browser):</div>
+        <div class="mono" id="tokenBox" style="margin-top:6px"></div>
+      </div>
+
+      <div id="profileBox" class="hide">
+        <div class="row" style="justify-content:space-between;align-items:flex-end;flex-wrap:wrap">
+          <div>
+            <h2 style="margin:0;font-size:24px">Your profile</h2>
+            <div class="muted">This is stored in KV (one profile per email).</div>
+          </div>
+          <div class="row">
+            <button class="btn ghost" id="btnRefresh">Refresh</button>
+            <button class="btn gray" id="btnLogout2">Log out</button>
+          </div>
+        </div>
+
+        <div class="grid" style="margin-top:10px">
+          <div>
+            <label for="name">Name</label>
+            <input id="name" type="text" placeholder="e.g. Lucky" />
+
+            <label for="phone">Phone</label>
+            <input id="phone" type="text" placeholder="e.g. +44..." />
+
+            <label for="location">Location</label>
+            <input id="location" type="text" placeholder="e.g. London" />
+          </div>
+
+          <div>
+            <label for="services">Services (comma-separated)</label>
+            <input id="services" type="text" placeholder="e.g. Plumbing, Electrical" />
+
+            <label for="bio">Bio</label>
+            <textarea id="bio" placeholder="Short description..."></textarea>
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:14px;flex-wrap:wrap">
+          <button class="btn primary" id="btnSave">Save profile</button>
+          <button class="btn danger" id="btnDelete">Delete my profile</button>
+          <div class="muted">Delete removes profile and ends the session.</div>
+        </div>
+
+        <div id="status2" class="status hide"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const AUTH_BASE = "https://handyman-auth-otp.l-aigbefoh.workers.dev";
+    const STORAGE_KEY = "handyman_auth_token";
+
+    const apiBaseEl = document.getElementById("apiBase");
+    apiBaseEl.textContent = AUTH_BASE;
+
+    const loginBox = document.getElementById("loginBox");
+    const profileBox = document.getElementById("profileBox");
+
+    const emailEl = document.getElementById("email");
+    const otpEl = document.getElementById("otp");
+    const tokenBox = document.getElementById("tokenBox");
+    const statusEl = document.getElementById("status");
+    const status2El = document.getElementById("status2");
+
+    const nameEl = document.getElementById("name");
+    const phoneEl = document.getElementById("phone");
+    const locationEl = document.getElementById("location");
+    const servicesEl = document.getElementById("services");
+    const bioEl = document.getElementById("bio");
+
+    function showStatus(el, msg) {
+      if (!msg) {
+        el.classList.add("hide");
+        el.textContent = "";
+        return;
+      }
+      el.textContent = msg;
+      el.classList.remove("hide");
+    }
+
+    function getToken() {
+      return localStorage.getItem(STORAGE_KEY) || "";
+    }
+
+    function setToken(token) {
+      if (!token) localStorage.removeItem(STORAGE_KEY);
+      else localStorage.setItem(STORAGE_KEY, token);
+      tokenBox.textContent = token || "(none)";
+    }
+
+    async function api(path, options = {}) {
+      const url = AUTH_BASE + path;
+      const headers = Object.assign({ "Content-Type": "application/json" }, options.headers || {});
+      const token = getToken();
+      if (token) headers["Authorization"] = "Bearer " + token;
+
+      const res = await fetch(url, Object.assign({ headers }, options));
+      const text = await res.text();
+
+      let data = null;
+      try {
+        data = text ? JSON.parse(text) : null;
+      } catch {
+        data = null;
+      }
+
+      return { res, data, text };
+    }
+
+    function showProfileUI() {
+      loginBox.classList.add("hide");
+      profileBox.classList.remove("hide");
+    }
+
+    function showLoginUI() {
+      profileBox.classList.add("hide");
+      loginBox.classList.remove("hide");
+    }
+
+    async function loadProfile() {
+      showStatus(status2El, "");
+      const { res, data } = await api("/me", { method: "GET" });
+
+      if (!res.ok) {
+        showLoginUI();
+        showStatus(statusEl, "Signed in token failed. Please sign in again.");
+        setToken("");
+        return;
+      }
+
+      const profile = data && data.profile ? data.profile : null;
+      if (!profile) {
+        showStatus(status2El, "Profile not found.");
+        return;
+      }
+
+      nameEl.value = profile.name || "";
+      phoneEl.value = profile.phone || "";
+      locationEl.value = profile.location || "";
+      bioEl.value = profile.bio || "";
+
+      const services = Array.isArray(profile.services) ? profile.services : [];
+      servicesEl.value = services.join(", ");
+
+      showProfileUI();
+      showStatus(status2El, "Profile loaded.");
+    }
+
+    async function sendOtp() {
+      showStatus(statusEl, "");
+      const email = (emailEl.value || "").trim();
+      if (!email) return showStatus(statusEl, "Enter an email address.");
+
+      const { res, data } = await api("/request-otp", {
+        method: "POST",
+        body: JSON.stringify({ email })
+      });
+
+      if (!res.ok) return showStatus(statusEl, (data && data.error) ? data.error : "Failed to request OTP.");
+      showStatus(statusEl, "Code sent. Check your inbox and spam.");
+      otpEl.focus();
+    }
+
+    async function verifyOtp() {
+      showStatus(statusEl, "");
+      const email = (emailEl.value || "").trim();
+      const otp = (otpEl.value || "").trim();
+      if (!email || !otp) return showStatus(statusEl, "Enter your email and the 6-digit code.");
+
+      const { res, data } = await api("/verify-otp", {
+        method: "POST",
+        body: JSON.stringify({ email, otp })
+      });
+
+      if (!res.ok || !data || !data.token) return showStatus(statusEl, (data && data.error) ? data.error : "Invalid code.");
+      setToken(data.token);
+      showStatus(statusEl, "Signed in. Loading your profile...");
+      await loadProfile();
+    }
+
+    async function saveProfile() {
+      showStatus(status2El, "");
+
+      const services = (servicesEl.value || "")
+        .split(",")
+        .map(s => s.trim())
+        .filter(Boolean);
+
+      const payload = {
+        name: nameEl.value || "",
+        phone: phoneEl.value || "",
+        location: locationEl.value || "",
+        bio: bioEl.value || "",
+        services
+      };
+
+      const { res, data } = await api("/me", {
+        method: "POST",
+        body: JSON.stringify(payload)
+      });
+
+      if (!res.ok) return showStatus(status2El, (data && data.error) ? data.error : "Failed to save profile.");
+      showStatus(status2El, "Saved.");
+    }
+
+    async function logout() {
+      showStatus(statusEl, "");
+      showStatus(status2El, "");
+
+      const token = getToken();
+      if (token) await api("/logout", { method: "POST" });
+
+      setToken("");
+      showLoginUI();
+      showStatus(statusEl, "Logged out.");
+    }
+
+    async function deleteProfile() {
+      showStatus(status2El, "");
+      const ok = confirm("Delete your profile? This cannot be undone.");
+      if (!ok) return;
+
+      const { res, data } = await api("/delete-me", { method: "POST" });
+      if (!res.ok) return showStatus(status2El, (data && data.error) ? data.error : "Failed to delete profile.");
+
+      setToken("");
+      showLoginUI();
+      showStatus(statusEl, "Profile deleted and logged out.");
+    }
+
+    document.getElementById("btnSend").addEventListener("click", sendOtp);
+    document.getElementById("btnVerify").addEventListener("click", verifyOtp);
+    document.getElementById("btnLogout").addEventListener("click", logout);
+    document.getElementById("btnLogout2").addEventListener("click", logout);
+    document.getElementById("btnRefresh").addEventListener("click", loadProfile);
+    document.getElementById("btnSave").addEventListener("click", saveProfile);
+    document.getElementById("btnDelete").addEventListener("click", deleteProfile);
+
+    setToken(getToken());
+
+    window.addEventListener("load", async () => {
+      const token = getToken();
+      if (!token) return;
+      showStatus(statusEl, "Signed in token found. Loading profile...");
+      await loadProfile();
+    });
+  </script>
+</body>
+</html>
