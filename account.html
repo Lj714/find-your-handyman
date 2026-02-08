@@ -6,315 +6,653 @@
   <title>My Account</title>
   <style>
     :root{
-      --bg:#f5f7fb; --card:#fff; --text:#0f172a; --muted:#64748b; --border:#e2e8f0; --primary:#1d4ed8;
+      --bg1:#0b1020; --bg2:#0b3b66;
+      --card:#ffffff;
+      --text:#0f172a;
+      --muted:#64748b;
+      --border:#e2e8f0;
+      --primary:#2563eb;
+      --primary2:#1d4ed8;
+      --danger:#ef4444;
+      --ok:#16a34a;
       --radius:18px;
+      --shadow:0 18px 45px rgba(2, 6, 23, .14);
     }
     *{box-sizing:border-box}
-    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
-    .wrap{max-width:980px;margin:40px auto;padding:0 16px}
-    .card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:28px;box-shadow:0 10px 30px rgba(15,23,42,.06)}
-    h1{margin:0 0 6px;font-size:42px;letter-spacing:-.02em}
-    p{margin:0 0 18px;color:var(--muted)}
-    .grid{display:grid;grid-template-columns:1fr;gap:16px}
-    @media(min-width:920px){.grid{grid-template-columns:1fr 1fr}}
-    label{display:block;font-weight:600;margin:12px 0 6px}
-    input,textarea{width:100%;padding:12px 14px;border:1px solid var(--border);border-radius:12px;font-size:16px;background:#fff}
-    textarea{min-height:110px;resize:vertical}
-    .row{display:flex;gap:10px;align-items:center}
-    .row .grow{flex:1}
-    .btn{border:0;border-radius:12px;padding:11px 14px;font-weight:700;cursor:pointer}
-    .btn.primary{background:var(--primary);color:#fff}
-    .btn.ghost{background:#eef2ff;color:#1e3a8a}
-    .btn.danger{background:#fee2e2;color:#991b1b}
-    .btn.gray{background:#f1f5f9;color:#0f172a}
-    .muted{color:var(--muted);font-size:14px}
-    .status{margin-top:14px;padding:12px 14px;border-radius:12px;border:1px solid #c7d2fe;background:#eef2ff;color:#1e3a8a}
-    .hide{display:none}
-    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;font-size:13px}
-    .divider{height:1px;background:var(--border);margin:18px 0}
-    .topbar{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
-    .pill{padding:6px 10px;border-radius:999px;border:1px solid var(--border);background:#fff}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(900px 500px at 20% 10%, rgba(37,99,235,.35), transparent 60%),
+        radial-gradient(700px 450px at 75% 20%, rgba(14,165,233,.25), transparent 60%),
+        linear-gradient(180deg, #f6f8ff 0%, #f2f6ff 55%, #eef2ff 100%);
+      min-height:100vh;
+    }
+    .topbar{
+      padding:18px 22px;
+      display:flex;
+      justify-content:center;
+    }
+    .shell{
+      max-width:1120px;
+      width:100%;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-weight:800;
+      letter-spacing:-.02em;
+    }
+    .dot{
+      width:38px;height:38px;border-radius:14px;
+      background:linear-gradient(135deg, var(--primary), #22c55e);
+      box-shadow:0 12px 24px rgba(37,99,235,.25);
+    }
+    .env{
+      font-size:12px;
+      color:var(--muted);
+      background:rgba(255,255,255,.7);
+      border:1px solid var(--border);
+      padding:8px 10px;
+      border-radius:12px;
+      backdrop-filter: blur(8px);
+      max-width:60%;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+    .grid{
+      max-width:1120px;
+      margin: 16px auto 56px;
+      padding: 0 22px;
+      display:grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap:18px;
+    }
+    @media (max-width: 980px){
+      .grid{grid-template-columns:1fr}
+      .env{max-width:100%}
+    }
+    .card{
+      background:var(--card);
+      border:1px solid rgba(226,232,240,.9);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .cardHead{
+      padding:18px 18px 10px;
+      border-bottom:1px solid rgba(226,232,240,.9);
+      background:linear-gradient(180deg, rgba(37,99,235,.06), transparent 75%);
+    }
+    .title{
+      margin:0;
+      font-size:22px;
+      letter-spacing:-.02em;
+    }
+    .subtitle{
+      margin:6px 0 0 0;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.4;
+    }
+    .cardBody{padding:18px}
+    .row{display:grid;grid-template-columns:1fr 160px;gap:12px;align-items:end}
+    @media (max-width: 540px){
+      .row{grid-template-columns:1fr}
+    }
+    label{display:block;font-weight:700;font-size:13px;margin:12px 0 6px}
+    input, textarea{
+      width:100%;
+      padding:12px 12px;
+      border:1px solid var(--border);
+      border-radius:14px;
+      outline:none;
+      font-size:14px;
+      background:#fff;
+    }
+    textarea{min-height:96px;resize:vertical}
+    input:focus, textarea:focus{border-color:rgba(37,99,235,.55); box-shadow: 0 0 0 4px rgba(37,99,235,.14)}
+    .btn{
+      width:100%;
+      padding:12px 14px;
+      border:0;
+      border-radius:14px;
+      font-weight:800;
+      color:#fff;
+      background:linear-gradient(135deg, var(--primary), var(--primary2));
+      cursor:pointer;
+      box-shadow:0 12px 24px rgba(37,99,235,.20);
+    }
+    .btn:active{transform:translateY(1px)}
+    .btn.secondary{
+      color:var(--text);
+      background:#f1f5f9;
+      box-shadow:none;
+      border:1px solid var(--border);
+    }
+    .btn.danger{
+      background:linear-gradient(135deg, #ef4444, #dc2626);
+      box-shadow:0 12px 24px rgba(239,68,68,.18);
+    }
+    .pillRow{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:12px;
+      align-items:center;
+    }
+    .pill{
+      font-size:12px;
+      color:var(--muted);
+      border:1px solid var(--border);
+      padding:6px 10px;
+      border-radius:999px;
+      background:#fff;
+    }
+    .status{
+      margin-top:14px;
+      padding:12px 12px;
+      border:1px solid rgba(226,232,240,.9);
+      background:#f8fafc;
+      border-radius:14px;
+      color:#0f172a;
+      font-size:13px;
+      line-height:1.35;
+    }
+    .status.ok{border-color: rgba(22,163,74,.28); background: rgba(22,163,74,.08)}
+    .status.bad{border-color: rgba(239,68,68,.28); background: rgba(239,68,68,.08)}
+    .tokenBox{
+      margin-top:10px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 12px;
+      word-break: break-all;
+      background:#0b1020;
+      color:#e2e8f0;
+      border:1px solid rgba(148,163,184,.25);
+      padding:12px;
+      border-radius:14px;
+    }
+    .profileTop{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+    .avatarWrap{
+      display:flex;
+      align-items:center;
+      gap:14px;
+    }
+    .avatar{
+      width:76px;height:76px;border-radius:22px;
+      border:1px solid var(--border);
+      background:linear-gradient(135deg, rgba(37,99,235,.14), rgba(34,197,94,.14));
+      overflow:hidden;
+      display:grid;
+      place-items:center;
+      flex:0 0 auto;
+    }
+    .avatar img{width:100%;height:100%;object-fit:cover;display:block}
+    .avatarInitial{
+      font-weight:900;
+      font-size:26px;
+      color:#1e293b;
+    }
+    .small{font-size:12px;color:var(--muted)}
+    .twoCol{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+    }
+    @media (max-width: 740px){
+      .twoCol{grid-template-columns:1fr}
+    }
+    .actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:14px;
+    }
+    .actions .btn{width:auto; min-width:140px}
+    .hint{margin-top:8px;color:var(--muted);font-size:12px}
+    .hidden{display:none !important}
+    .fileBtn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid var(--border);
+      background:#fff;
+      cursor:pointer;
+      font-weight:800;
+      color:#0f172a;
+      width: fit-content;
+    }
+    .fileBtn input{display:none}
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="card">
-      <div class="topbar">
+  <div class="topbar">
+    <div class="shell">
+      <div class="brand">
+        <div class="dot"></div>
         <div>
-          <h1>My Account</h1>
-          <p>Sign in with email + one-time code (OTP).</p>
+          <div>Find Your Next Handyman</div>
+          <div class="small">Account & Profile</div>
         </div>
-        <div class="pill muted">Auth API: <span class="mono" id="apiBase"></span></div>
       </div>
-
-      <div id="loginBox">
-        <label for="email">Email</label>
-        <div class="row">
-          <input class="grow" id="email" type="email" placeholder="you@example.com" autocomplete="email" />
-          <button class="btn primary" id="btnSend">Send code</button>
-        </div>
-
-        <label for="otp">OTP code</label>
-        <div class="row">
-          <input class="grow" id="otp" type="text" inputmode="numeric" placeholder="6-digit code" />
-          <button class="btn primary" id="btnVerify">Verify</button>
-        </div>
-
-        <div class="row" style="margin-top:10px">
-          <button class="btn gray" id="btnLogout">Log out</button>
-          <div class="muted">If you are already signed in, this clears your saved token.</div>
-        </div>
-
-        <div id="status" class="status hide"></div>
-        <div class="divider"></div>
-        <div class="muted">Token (saved in this browser):</div>
-        <div class="mono" id="tokenBox" style="margin-top:6px"></div>
-      </div>
-
-      <div id="profileBox" class="hide">
-        <div class="row" style="justify-content:space-between;align-items:flex-end;flex-wrap:wrap">
-          <div>
-            <h2 style="margin:0;font-size:24px">Your profile</h2>
-            <div class="muted">This is stored in KV (one profile per email).</div>
-          </div>
-          <div class="row">
-            <button class="btn ghost" id="btnRefresh">Refresh</button>
-            <button class="btn gray" id="btnLogout2">Log out</button>
-          </div>
-        </div>
-
-        <div class="grid" style="margin-top:10px">
-          <div>
-            <label for="name">Name</label>
-            <input id="name" type="text" placeholder="e.g. Lucky" />
-
-            <label for="phone">Phone</label>
-            <input id="phone" type="text" placeholder="e.g. +44..." />
-
-            <label for="location">Location</label>
-            <input id="location" type="text" placeholder="e.g. London" />
-          </div>
-
-          <div>
-            <label for="services">Services (comma-separated)</label>
-            <input id="services" type="text" placeholder="e.g. Plumbing, Electrical" />
-
-            <label for="bio">Bio</label>
-            <textarea id="bio" placeholder="Short description..."></textarea>
-          </div>
-        </div>
-
-        <div class="row" style="margin-top:14px;flex-wrap:wrap">
-          <button class="btn primary" id="btnSave">Save profile</button>
-          <button class="btn danger" id="btnDelete">Delete my profile</button>
-          <div class="muted">Delete removes profile and ends the session.</div>
-        </div>
-
-        <div id="status2" class="status hide"></div>
-      </div>
+      <div class="env" id="apiPill"></div>
     </div>
   </div>
 
+  <div class="grid">
+    <section class="card" id="authCard">
+      <div class="cardHead">
+        <h2 class="title">Sign in</h2>
+        <p class="subtitle">Enter your email to receive a one-time passcode (OTP).</p>
+      </div>
+      <div class="cardBody">
+        <div class="row">
+          <div>
+            <label>Email</label>
+            <input id="email" placeholder="you@example.com" autocomplete="email" />
+          </div>
+          <div>
+            <button class="btn" id="sendBtn">Send code</button>
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:6px;">
+          <div>
+            <label>OTP code</label>
+            <input id="otp" placeholder="6-digit code" inputmode="numeric" autocomplete="one-time-code" />
+          </div>
+          <div>
+            <button class="btn" id="verifyBtn">Verify</button>
+          </div>
+        </div>
+
+        <div class="status" id="authStatus">Not signed in.</div>
+        <div class="tokenBox hidden" id="tokenBox"></div>
+      </div>
+    </section>
+
+    <section class="card hidden" id="profileCard">
+      <div class="cardHead">
+        <div class="profileTop">
+          <div>
+            <h2 class="title">Your profile</h2>
+            <p class="subtitle">This is stored in KV (one profile per email).</p>
+          </div>
+          <div class="pillRow">
+            <button class="btn secondary" id="refreshBtn" style="min-width:120px;">Refresh</button>
+            <button class="btn secondary" id="logoutBtn" style="min-width:120px;">Log out</button>
+          </div>
+        </div>
+      </div>
+      <div class="cardBody">
+        <div class="avatarWrap">
+          <div class="avatar" id="avatar">
+            <div class="avatarInitial" id="avatarInitial">?</div>
+          </div>
+          <div>
+            <div style="font-weight:900;font-size:14px;letter-spacing:-.01em" id="whoami">Not loaded</div>
+            <div class="hint">Photo is saved to your profile. Use a small image.</div>
+            <label class="fileBtn">
+              Upload photo
+              <input type="file" id="photoInput" accept="image/*" />
+            </label>
+            <div class="hint" id="photoHint"></div>
+          </div>
+        </div>
+
+        <div class="twoCol" style="margin-top:10px;">
+          <div>
+            <label>Name</label>
+            <input id="name" placeholder="Your name" />
+          </div>
+          <div>
+            <label>Services (comma-separated)</label>
+            <input id="services" placeholder="Plumber, Electrician, ..." />
+          </div>
+          <div>
+            <label>Phone</label>
+            <input id="phone" placeholder="+44..." />
+          </div>
+          <div>
+            <label>Location</label>
+            <input id="location" placeholder="City / area" />
+          </div>
+        </div>
+
+        <label>Bio</label>
+        <textarea id="bio" placeholder="Short description..."></textarea>
+
+        <div class="actions">
+          <button class="btn" id="saveBtn">Save profile</button>
+          <button class="btn danger" id="deleteBtn">Delete my profile</button>
+        </div>
+
+        <div class="status" id="profileStatus">Profile not loaded.</div>
+      </div>
+    </section>
+  </div>
+
   <script>
-    const AUTH_BASE = "https://handyman-auth-otp.l-aigbefoh.workers.dev";
-    const STORAGE_KEY = "handyman_auth_token";
+    const WORKER_BASE = "https://handyman-auth-otp.l-aigbefoh.workers.dev";
+    document.getElementById("apiPill").textContent = "Auth API: " + WORKER_BASE;
 
-    const apiBaseEl = document.getElementById("apiBase");
-    apiBaseEl.textContent = AUTH_BASE;
+    const els = {
+      email: document.getElementById("email"),
+      otp: document.getElementById("otp"),
+      sendBtn: document.getElementById("sendBtn"),
+      verifyBtn: document.getElementById("verifyBtn"),
+      authStatus: document.getElementById("authStatus"),
+      tokenBox: document.getElementById("tokenBox"),
+      authCard: document.getElementById("authCard"),
+      profileCard: document.getElementById("profileCard"),
+      refreshBtn: document.getElementById("refreshBtn"),
+      logoutBtn: document.getElementById("logoutBtn"),
+      deleteBtn: document.getElementById("deleteBtn"),
+      saveBtn: document.getElementById("saveBtn"),
+      profileStatus: document.getElementById("profileStatus"),
+      name: document.getElementById("name"),
+      phone: document.getElementById("phone"),
+      location: document.getElementById("location"),
+      services: document.getElementById("services"),
+      bio: document.getElementById("bio"),
+      avatar: document.getElementById("avatar"),
+      avatarInitial: document.getElementById("avatarInitial"),
+      whoami: document.getElementById("whoami"),
+      photoInput: document.getElementById("photoInput"),
+      photoHint: document.getElementById("photoHint"),
+    };
 
-    const loginBox = document.getElementById("loginBox");
-    const profileBox = document.getElementById("profileBox");
+    let cachedProfile = null;
+    let photoDataUrl = "";
 
-    const emailEl = document.getElementById("email");
-    const otpEl = document.getElementById("otp");
-    const tokenBox = document.getElementById("tokenBox");
-    const statusEl = document.getElementById("status");
-    const status2El = document.getElementById("status2");
+    function setAuthStatus(msg, kind) {
+      els.authStatus.textContent = msg;
+      els.authStatus.classList.remove("ok", "bad");
+      if (kind) els.authStatus.classList.add(kind);
+    }
 
-    const nameEl = document.getElementById("name");
-    const phoneEl = document.getElementById("phone");
-    const locationEl = document.getElementById("location");
-    const servicesEl = document.getElementById("services");
-    const bioEl = document.getElementById("bio");
-
-    function showStatus(el, msg) {
-      if (!msg) {
-        el.classList.add("hide");
-        el.textContent = "";
-        return;
-      }
-      el.textContent = msg;
-      el.classList.remove("hide");
+    function setProfileStatus(msg, kind) {
+      els.profileStatus.textContent = msg;
+      els.profileStatus.classList.remove("ok", "bad");
+      if (kind) els.profileStatus.classList.add(kind);
     }
 
     function getToken() {
-      return localStorage.getItem(STORAGE_KEY) || "";
+      return localStorage.getItem("auth_token") || "";
     }
 
     function setToken(token) {
-      if (!token) localStorage.removeItem(STORAGE_KEY);
-      else localStorage.setItem(STORAGE_KEY, token);
-      tokenBox.textContent = token || "(none)";
+      localStorage.setItem("auth_token", token);
+      els.tokenBox.classList.remove("hidden");
+      els.tokenBox.textContent = token;
     }
 
-    async function api(path, options = {}) {
-      const url = AUTH_BASE + path;
-      const headers = Object.assign({ "Content-Type": "application/json" }, options.headers || {});
-      const token = getToken();
-      if (token) headers["Authorization"] = "Bearer " + token;
-
-      const res = await fetch(url, Object.assign({ headers }, options));
-      const text = await res.text();
-
-      let data = null;
-      try {
-        data = text ? JSON.parse(text) : null;
-      } catch {
-        data = null;
-      }
-
-      return { res, data, text };
+    function clearToken() {
+      localStorage.removeItem("auth_token");
+      els.tokenBox.classList.add("hidden");
+      els.tokenBox.textContent = "";
     }
 
     function showProfileUI() {
-      loginBox.classList.add("hide");
-      profileBox.classList.remove("hide");
+      els.profileCard.classList.remove("hidden");
+      els.authCard.classList.add("hidden");
     }
 
-    function showLoginUI() {
-      profileBox.classList.add("hide");
-      loginBox.classList.remove("hide");
+    function showAuthUI() {
+      els.profileCard.classList.add("hidden");
+      els.authCard.classList.remove("hidden");
+    }
+
+    function setAvatar(profile) {
+      const email = (profile?.email || "").trim();
+      const name = (profile?.name || "").trim();
+      const initial = (name || email || "?").slice(0, 1).toUpperCase();
+      els.avatar.innerHTML = "";
+      if (profile?.photo && typeof profile.photo === "string" && profile.photo.startsWith("data:image/")) {
+        const img = document.createElement("img");
+        img.src = profile.photo;
+        img.alt = "Profile photo";
+        els.avatar.appendChild(img);
+        photoDataUrl = profile.photo;
+      } else {
+        const d = document.createElement("div");
+        d.className = "avatarInitial";
+        d.id = "avatarInitial";
+        d.textContent = initial;
+        els.avatar.appendChild(d);
+        photoDataUrl = "";
+      }
+      els.whoami.textContent = email ? ("Signed in as " + email) : "Signed in";
+    }
+
+    function fillForm(profile) {
+      cachedProfile = profile || null;
+      els.name.value = profile?.name || "";
+      els.phone.value = profile?.phone || "";
+      els.location.value = profile?.location || "";
+      els.bio.value = profile?.bio || "";
+      const services = Array.isArray(profile?.services) ? profile.services : [];
+      els.services.value = services.join(", ");
+      setAvatar(profile);
+    }
+
+    function parseServices(text) {
+      return text
+        .split(",")
+        .map(s => s.trim())
+        .filter(Boolean)
+        .slice(0, 20);
+    }
+
+    async function api(path, opts = {}) {
+      const token = getToken();
+      const headers = Object.assign({}, opts.headers || {});
+      if (token) headers["Authorization"] = "Bearer " + token;
+      const res = await fetch(WORKER_BASE + path, Object.assign({}, opts, { headers }));
+      const text = await res.text();
+      let data = null;
+      try { data = text ? JSON.parse(text) : null; } catch { data = null; }
+      return { res, data, text };
     }
 
     async function loadProfile() {
-      showStatus(status2El, "");
+      setProfileStatus("Loading profile...");
       const { res, data } = await api("/me", { method: "GET" });
-
-      if (!res.ok) {
-        showLoginUI();
-        showStatus(statusEl, "Signed in token failed. Please sign in again.");
-        setToken("");
+      if (!res.ok || !data?.ok || !data?.profile) {
+        if (res.status === 401) {
+          clearToken();
+          showAuthUI();
+          setAuthStatus("Session expired. Please sign in again.", "bad");
+          return;
+        }
+        setProfileStatus("Could not load profile.", "bad");
         return;
       }
-
-      const profile = data && data.profile ? data.profile : null;
-      if (!profile) {
-        showStatus(status2El, "Profile not found.");
-        return;
-      }
-
-      nameEl.value = profile.name || "";
-      phoneEl.value = profile.phone || "";
-      locationEl.value = profile.location || "";
-      bioEl.value = profile.bio || "";
-
-      const services = Array.isArray(profile.services) ? profile.services : [];
-      servicesEl.value = services.join(", ");
-
-      showProfileUI();
-      showStatus(status2El, "Profile loaded.");
-    }
-
-    async function sendOtp() {
-      showStatus(statusEl, "");
-      const email = (emailEl.value || "").trim();
-      if (!email) return showStatus(statusEl, "Enter an email address.");
-
-      const { res, data } = await api("/request-otp", {
-        method: "POST",
-        body: JSON.stringify({ email })
-      });
-
-      if (!res.ok) return showStatus(statusEl, (data && data.error) ? data.error : "Failed to request OTP.");
-      showStatus(statusEl, "Code sent. Check your inbox and spam.");
-      otpEl.focus();
-    }
-
-    async function verifyOtp() {
-      showStatus(statusEl, "");
-      const email = (emailEl.value || "").trim();
-      const otp = (otpEl.value || "").trim();
-      if (!email || !otp) return showStatus(statusEl, "Enter your email and the 6-digit code.");
-
-      const { res, data } = await api("/verify-otp", {
-        method: "POST",
-        body: JSON.stringify({ email, otp })
-      });
-
-      if (!res.ok || !data || !data.token) return showStatus(statusEl, (data && data.error) ? data.error : "Invalid code.");
-      setToken(data.token);
-      showStatus(statusEl, "Signed in.");
-      showProfileUI();
-      await loadProfile();
+      fillForm(data.profile);
+      setProfileStatus("Profile loaded.", "ok");
     }
 
     async function saveProfile() {
-      showStatus(status2El, "");
-
-      const services = (servicesEl.value || "")
-        .split(",")
-        .map(s => s.trim())
-        .filter(Boolean);
-
+      setProfileStatus("Saving profile...");
       const payload = {
-        name: nameEl.value || "",
-        phone: phoneEl.value || "",
-        location: locationEl.value || "",
-        bio: bioEl.value || "",
-        services
+        name: els.name.value.trim(),
+        phone: els.phone.value.trim(),
+        location: els.location.value.trim(),
+        bio: els.bio.value.trim(),
+        services: parseServices(els.services.value),
+        photo: photoDataUrl || ""
       };
-
       const { res, data } = await api("/me", {
         method: "POST",
-        body: JSON.stringify(payload)
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
       });
-
-      if (!res.ok) return showStatus(status2El, (data && data.error) ? data.error : "Failed to save profile.");
-      showStatus(status2El, "Saved.");
-    }
-
-    async function logout() {
-      showStatus(statusEl, "");
-      showStatus(status2El, "");
-
-      const token = getToken();
-      if (token) await api("/logout", { method: "POST" });
-
-      setToken("");
-      showLoginUI();
-      showStatus(statusEl, "Logged out.");
+      if (!res.ok || !data?.ok || !data?.profile) {
+        if (res.status === 401) {
+          clearToken();
+          showAuthUI();
+          setAuthStatus("Session expired. Please sign in again.", "bad");
+          return;
+        }
+        setProfileStatus("Could not save profile.", "bad");
+        return;
+      }
+      fillForm(data.profile);
+      setProfileStatus("Profile saved.", "ok");
     }
 
     async function deleteProfile() {
-      showStatus(status2El, "");
-      const ok = confirm("Delete your profile? This cannot be undone.");
-      if (!ok) return;
-
+      const confirmed = confirm("Delete your profile and end your session?");
+      if (!confirmed) return;
+      setProfileStatus("Deleting profile...");
       const { res, data } = await api("/delete-me", { method: "POST" });
-      if (!res.ok) return showStatus(status2El, (data && data.error) ? data.error : "Failed to delete profile.");
-
-      setToken("");
-      showLoginUI();
-      showStatus(statusEl, "Profile deleted and logged out.");
+      if (!res.ok || !data?.ok) {
+        setProfileStatus("Could not delete profile.", "bad");
+        return;
+      }
+      clearToken();
+      cachedProfile = null;
+      photoDataUrl = "";
+      showAuthUI();
+      setAuthStatus("Profile deleted. You are signed out.", "ok");
     }
 
-    document.getElementById("btnSend").addEventListener("click", sendOtp);
-    document.getElementById("btnVerify").addEventListener("click", verifyOtp);
-    document.getElementById("btnLogout").addEventListener("click", logout);
-    document.getElementById("btnLogout2").addEventListener("click", logout);
-    document.getElementById("btnRefresh").addEventListener("click", loadProfile);
-    document.getElementById("btnSave").addEventListener("click", saveProfile);
-    document.getElementById("btnDelete").addEventListener("click", deleteProfile);
-
-    setToken(getToken());
-
-    window.addEventListener("load", async () => {
+    async function logout() {
       const token = getToken();
-      if (!token) return;
+      if (!token) {
+        showAuthUI();
+        setAuthStatus("Not signed in.");
+        return;
+      }
+      await api("/logout", { method: "POST" });
+      clearToken();
+      cachedProfile = null;
+      photoDataUrl = "";
+      showAuthUI();
+      setAuthStatus("Signed out.", "ok");
+    }
+
+    async function requestOtp() {
+      const email = els.email.value.trim();
+      if (!email) return setAuthStatus("Enter an email first.", "bad");
+      setAuthStatus("Sending code...");
+      const res = await fetch(WORKER_BASE + "/request-otp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      const text = await res.text();
+      let data = null;
+      try { data = text ? JSON.parse(text) : null; } catch { data = null; }
+      if (!res.ok || !data?.ok) return setAuthStatus("Error sending code.", "bad");
+      setAuthStatus("Code sent. Check your email, then enter it below.", "ok");
+    }
+
+    async function verifyOtp() {
+      const email = els.email.value.trim();
+      const otp = els.otp.value.trim();
+      if (!email) return setAuthStatus("Enter your email.", "bad");
+      if (!otp) return setAuthStatus("Enter the OTP code.", "bad");
+      setAuthStatus("Verifying...");
+      const res = await fetch(WORKER_BASE + "/verify-otp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, otp }),
+      });
+      const text = await res.text();
+      let data = null;
+      try { data = text ? JSON.parse(text) : null; } catch { data = null; }
+      if (!res.ok || !data?.ok || !data?.verified || !data?.token) return setAuthStatus("Invalid OTP. Try again.", "bad");
+      setToken(data.token);
       showProfileUI();
-      showStatus(statusEl, "Signed in.");
+      setAuthStatus("Signed in.", "ok");
       await loadProfile();
+    }
+
+    async function fileToResizedDataUrl(file, maxDim, quality) {
+      const blobUrl = URL.createObjectURL(file);
+      const img = new Image();
+      img.src = blobUrl;
+      await new Promise((resolve, reject) => {
+        img.onload = resolve;
+        img.onerror = reject;
+      });
+      const w = img.naturalWidth;
+      const h = img.naturalHeight;
+      const scale = Math.min(1, maxDim / Math.max(w, h));
+      const tw = Math.max(1, Math.round(w * scale));
+      const th = Math.max(1, Math.round(h * scale));
+      const canvas = document.createElement("canvas");
+      canvas.width = tw;
+      canvas.height = th;
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0, tw, th);
+      URL.revokeObjectURL(blobUrl);
+      return canvas.toDataURL("image/jpeg", quality);
+    }
+
+    function bytesFromDataUrl(dataUrl) {
+      const i = dataUrl.indexOf(",");
+      if (i === -1) return 0;
+      const b64 = dataUrl.slice(i + 1);
+      const len = b64.length;
+      const padding = (b64.endsWith("==") ? 2 : b64.endsWith("=") ? 1 : 0);
+      return Math.max(0, Math.floor((len * 3) / 4) - padding);
+    }
+
+    els.sendBtn.addEventListener("click", requestOtp);
+    els.verifyBtn.addEventListener("click", verifyOtp);
+    els.refreshBtn.addEventListener("click", loadProfile);
+    els.saveBtn.addEventListener("click", saveProfile);
+    els.deleteBtn.addEventListener("click", deleteProfile);
+    els.logoutBtn.addEventListener("click", logout);
+
+    els.photoInput.addEventListener("change", async (e) => {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+      els.photoHint.textContent = "Processing photo...";
+      try {
+        const dataUrl = await fileToResizedDataUrl(file, 256, 0.82);
+        const bytes = bytesFromDataUrl(dataUrl);
+        if (bytes > 200000) {
+          els.photoHint.textContent = "Photo is still too large. Please choose a smaller image.";
+          return;
+        }
+        photoDataUrl = dataUrl;
+        setAvatar({ ...(cachedProfile || {}), photo: photoDataUrl, email: cachedProfile?.email || "" });
+        els.photoHint.textContent = "Photo ready. Click Save profile to store it.";
+      } catch {
+        els.photoHint.textContent = "Could not read that image.";
+      }
     });
+
+    const existing = getToken();
+    if (existing) {
+      setToken(existing);
+      showProfileUI();
+      loadProfile().catch(() => {
+        showAuthUI();
+        setAuthStatus("Session expired. Please sign in again.", "bad");
+      });
+    } else {
+      showAuthUI();
+      setAuthStatus("Not signed in.");
+    }
   </script>
 </body>
 </html>
